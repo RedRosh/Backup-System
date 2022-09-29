@@ -29,7 +29,7 @@ def unzip_file(file):
 # tar the file
 def tar_files(files):
     tf = BytesIO()
-    tf.filename= datetime.today().strftime('%Y%d%m') + '.tar.gz'
+    tf.filename= datetime.today().strftime('%Y%d%m-') + '.tar.gz'
     with tarfile.open(fileobj=tf, mode='w:gz') as tar:
         for filename in files.keys():
             info = tarfile.TarInfo(filename)
@@ -50,7 +50,10 @@ def delete_ftp_files(files):
          session.delete(file)
     session.quit()
     
-    
+def get_hash(file):
+    bytes = file.read() # read entire file as bytes
+    return hashlib.sha256(bytes).hexdigest()
+        
 
 if __name__ == '__main__':
     url=environ.get('URL') + environ.get('FILE_NAME')
@@ -58,8 +61,11 @@ if __name__ == '__main__':
     file = get_file(url)
     files = unzip_file(file) # Returns a list of files
     tar_file = tar_files(files)
+    file_hash= get_hash(tar_file)
+    print(file_hash)
     store_file(tar_file)
-    delete_ftp_files([tar_file.filename])
+    
+    # delete_ftp_files([tar_file.filename])
   
 
 
