@@ -5,7 +5,7 @@ import requests,zipfile
 import tarfile
 from datetime import datetime
 import ftplib
-
+import hashlib
 
 # Find .env file and load it
 basedir = path.abspath(path.dirname(__file__))
@@ -19,6 +19,7 @@ def get_file(url):
 # Unzip the file
 def unzip_file(file):
     zip = zipfile.ZipFile(BytesIO(file))
+    zip.__hash__
     files= {}
     for file_details in zip.infolist():
         files[file_details.filename.split('/')[-1]] ={"content" : zip.open(file_details.filename).read(),"size": file_details.file_size,"date_time" : file_details.date_time} # content , size , datetime
@@ -42,7 +43,7 @@ def  store_file(tar_file):
     session.storbinary('STOR '+ tar_file.filename, BytesIO(tar_file.getvalue()))
     session.quit()
 
-# delete fileS in ftp server
+# delete files in ftp server
 def delete_ftp_files(files):
     session = ftplib.FTP(environ.get('ftp_server_address'),environ.get('ftp_username'),environ.get('ftp_password'))
     for file in files:
