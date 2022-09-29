@@ -38,11 +38,18 @@ def tar_files(files):
 
 # store file in ftp
 def  store_file(tar_file):
-    session = ftplib.FTP('ftp','admin','admin')
+    session = ftplib.FTP(environ.get('ftp_server_address'),environ.get('ftp_username'),environ.get('ftp_password'))
     session.storbinary('STOR '+ tar_file.filename, BytesIO(tar_file.getvalue()))
     session.quit()
 
-
+# delete fileS in ftp server
+def delete_ftp_files(files):
+    session = ftplib.FTP(environ.get('ftp_server_address'),environ.get('ftp_username'),environ.get('ftp_password'))
+    for file in files:
+         session.delete(file)
+    session.quit()
+    
+    
 
 if __name__ == '__main__':
     url=environ.get('URL') + environ.get('FILE_NAME')
@@ -51,6 +58,7 @@ if __name__ == '__main__':
     files = unzip_file(file) # Returns a list of files
     tar_file = tar_files(files)
     store_file(tar_file)
+    delete_ftp_files([tar_file.filename])
   
 
 
