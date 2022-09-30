@@ -9,7 +9,7 @@ services:
       - ./app/storage:/app/storage
       - ./app:/app
     working_dir: /app
-    command: python3 entry.py
+    command: cron -f
     depends_on:
       - nginx
       - ftp
