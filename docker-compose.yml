@@ -28,7 +28,8 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - database:/var/lib/postgresql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - database:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: admin
       POSTGRES_USER: admin
