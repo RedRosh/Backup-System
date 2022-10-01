@@ -7,14 +7,18 @@ from datetime import datetime
 import ftplib
 import hashlib
 
+from modules.ServerWeb import ServerWeb
+
 # Find .env file and load it
 basedir = path.abspath(path.dirname(__file__))
 load_dotenv(path.join(basedir, 'config.env'))
 
 # Retrieve a file from a server
 def get_file(url):
-    req = requests.get(url)
-    return req.content
+    '''Returns a file from a url'''
+    response = requests.get(url)
+    return response.content
+
 
 # Unzip the file
 def unzip_file(file):
@@ -56,9 +60,9 @@ def get_hash(file):
         
 
 if __name__ == '__main__':
-    url=environ.get('URL') + environ.get('FILE_NAME')
-    print('Downloading file from: ' + url)
-    file = get_file(url)
+    serverWeb = ServerWeb(environ.get('URL'))
+    file = serverWeb.retrieve_file(environ.get('FILE_NAME'))
+
     files = unzip_file(file) # Returns a list of files
     tar_file = tar_files(files)
     file_hash= get_hash(tar_file)
