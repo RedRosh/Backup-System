@@ -12,8 +12,8 @@ services:
     depends_on:
       - nginx
       - ftp
-      - adminer
       - db
+      - smtp
   nginx:
     image: nginx
     ports:
@@ -34,6 +34,11 @@ services:
       POSTGRES_PASSWORD: admin
       POSTGRES_USER: admin
       POSTGRES_DB: archivage_db
+
+  smtp:
+    image: namshi/smtp
+    ports:
+      - "2525:25"
 
   adminer:
     image: adminer
