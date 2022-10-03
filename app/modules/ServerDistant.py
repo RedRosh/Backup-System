@@ -1,6 +1,6 @@
 import ftplib
 from io import BytesIO
-from modules.FileManager import FileManager
+from modules.ConfigHandler import ConfigHandler
 from modules.DbHandler import DbHandler
 from os import environ
 from datetime import date, timedelta
@@ -15,9 +15,10 @@ class ServerDistant:
     
     
     def add_file(self,file,hash):
+        config = ConfigHandler()
         db=  DbHandler(environ.get('DB_HOST'),environ.get('DB_USER'),environ.get('DB_PASSWORD'),environ.get('DB_NAME'))
-        expiration_date =  date.today() + timedelta(days=  int(environ.get('EXPIRATION_DATE')))
-        versioning = bool(int(environ.get('VERSIONING')))
+        expiration_date =  date.today() + timedelta(days=  int(config.get_expired_in()))
+        versioning = bool(int(config.get_versioning()))
         
         records =  db.find_record(hash)
         if  versioning:
