@@ -13,7 +13,8 @@ services:
       - nginx
       - ftp
       - db
-      - smtp
+
+
 
   nginx:
     image: nginx
