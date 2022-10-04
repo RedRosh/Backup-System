@@ -2,19 +2,20 @@ version: "3.3"
 services:
   app:
     image: "script"
+    ports:
+      - "5000:1234"
     build:
       context: ./app
       dockerfile: ./Dockerfile
     volumes:
-      - ./app:/app
+      - ./app/config.yml:/app/config.yml
+      - ./doc:/app/doc
     working_dir: /app
-    command: cron -f
+    command: /bin/sh -c ./entry.sh
     depends_on:
       - nginx
       - ftp
       - db
-
-
 
   nginx:
     image: nginx
@@ -23,9 +24,18 @@ services:
     volumes:
       - ./public:/usr/share/nginx/www/data
       - ./nginx.conf:/etc/nginx/nginx.conf
+  documentation:
+    image: nginx
+    ports:
+      - "8081:80"
+    volumes:
+      - ./doc/app:/usr/share/nginx/www
+      - ./nginx_doc.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - app
 
   db:
-    image: postgres
+    image: postgres:13.4-alpine
     restart: always
     ports:
       - "5432:5432"
