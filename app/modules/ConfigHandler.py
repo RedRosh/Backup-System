@@ -12,6 +12,7 @@ class ConfigHandler:
     data = None
     
     def __init__(self):
+        ''' this is the main '''
         if ConfigHandler.data != None:
             return
     

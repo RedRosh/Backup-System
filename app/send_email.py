@@ -3,13 +3,13 @@ import smtplib, ssl
 port = 465  # For SSL
 smtp_server = "smtp.gmail.com"
 sender_email = "archivagebot@gmail.com"  # Enter your address
-receivers_email = ["Omarelgribes07@gmail.com","ad.ezzaim@gmail.com"]  # Enter receiver address
+receivers_email = ["ad.ezzaim@gmail.com"]  # Enter receiver address
 password = 'tgkuspwabhnyvine'
 
 message = """From: From Archivage Bot <daily_reminder@archivage.tse>
-Subject: SMTP e-mail test
+Subject: PC Adnane Ez-zaml
 
-This is a test e-mail message.
+ser t7awa asat brojola.
 """
 
 context = ssl.create_default_context()

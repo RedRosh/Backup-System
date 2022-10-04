@@ -2,6 +2,8 @@ version: "3.3"
 services:
   app:
     image: "script"
+    ports: 
+    - "5000:1234" 
     build:
       context: ./app
       dockerfile: ./Dockerfile
@@ -23,6 +25,14 @@ services:
     volumes:
       - ./public:/usr/share/nginx/www/data
       - ./nginx.conf:/etc/nginx/nginx.conf
+  documentation:
+    image: nginx
+    ports:
+     - "8081:80"
+    volumes:
+      - ./doc/html/app:/usr/share/nginx/www
+      - ./nginx_doc.conf:/etc/nginx/nginx.conf
+
 
   db:
     image: postgres
