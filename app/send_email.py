@@ -7,9 +7,9 @@ receivers_email = ["ad.ezzaim@gmail.com"]  # Enter receiver address
 password = 'tgkuspwabhnyvine'
 
 message = """From: From Archivage Bot <daily_reminder@archivage.tse>
-Subject: PC Adnane Ez-zaml
+Subject: TEST
 
-ser t7awa asat brojola.
+this message is a test.
 """
 
 context = ssl.create_default_context()

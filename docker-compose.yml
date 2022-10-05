@@ -2,6 +2,7 @@ version: "3.3"
 services:
   app:
     image: "script"
+    restart: always
     ports:
       - "5000:1234"
     build:
@@ -11,7 +12,7 @@ services:
       - ./app/config.yml:/app/config.yml
       - ./doc:/app/doc
     working_dir: /app
-    command: /bin/sh -c ./entry.sh
+    command: ["wait-for-it", "db:5432", "--","/bin/sh", "-c","./entry.sh"]
     depends_on:
       - nginx
       - ftp
