@@ -1,12 +1,16 @@
 import psycopg2
+import logging
 
 
+logger = logging.getLogger()
 class DbHandler:
     connection = None
     
     def __init__(self, host, user, password, database):
-        self.connection =  psycopg2.connect( host=host,database=database,user=user,password=password)
-
+            self.connection =  psycopg2.connect( host=host,database=database,user=user,password=password)
+            logger.info("connection to database was established")
+        
+            
     def find_invalid_records(self):
         sql = "SELECT * FROM v_archivage_files WHERE is_expired = {} OR is_valid={};".format(True,False)
         cur = self.connection.cursor()
