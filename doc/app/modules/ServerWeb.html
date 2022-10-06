@@ -29,12 +29,15 @@
 <pre><code class="python">import requests
 
 class ServerWeb :
+    &#39;&#39;&#39; ##**La classe qui gère le serveur web**.&#39;&#39;&#39;
     base_url = &#39;&#39;
+    &#39;&#39;&#39;L&#39;url de notre serveur web.&#39;&#39;&#39;
     
     def __init__(self, base_url):
         self.base_url = base_url
         
     def retrieve_file(self,filename):
+        &#39;&#39;&#39;Récupération du fichier à partir du serveur.&#39;&#39;&#39;
         response = requests.get(&#39;{}{}&#39;.format(self.base_url,filename))
         return response.content</code></pre>
 </details>
@@ -53,18 +56,21 @@ class ServerWeb :
 <span>(</span><span>base_url)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><h2 id="la-classe-qui-gere-le-serveur-web"><strong>La classe qui gère le serveur web</strong>.</h2></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class ServerWeb :
+    &#39;&#39;&#39; ##**La classe qui gère le serveur web**.&#39;&#39;&#39;
     base_url = &#39;&#39;
+    &#39;&#39;&#39;L&#39;url de notre serveur web.&#39;&#39;&#39;
     
     def __init__(self, base_url):
         self.base_url = base_url
         
     def retrieve_file(self,filename):
+        &#39;&#39;&#39;Récupération du fichier à partir du serveur.&#39;&#39;&#39;
         response = requests.get(&#39;{}{}&#39;.format(self.base_url,filename))
         return response.content</code></pre>
 </details>
@@ -72,7 +78,7 @@ class ServerWeb :
 <dl>
 <dt id="app.modules.ServerWeb.ServerWeb.base_url"><code class="name">var <span class="ident">base_url</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>L'url de notre serveur web.</p></div>
 </dd>
 </dl>
 <h3>Methods</h3>
@@ -81,12 +87,13 @@ class ServerWeb :
 <span>def <span class="ident">retrieve_file</span></span>(<span>self, filename)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Récupération du fichier à partir du serveur.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def retrieve_file(self,filename):
+    &#39;&#39;&#39;Récupération du fichier à partir du serveur.&#39;&#39;&#39;
     response = requests.get(&#39;{}{}&#39;.format(self.base_url,filename))
     return response.content</code></pre>
 </details>

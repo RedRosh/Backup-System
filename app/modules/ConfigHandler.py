@@ -9,12 +9,12 @@ v = Validator(schema)
 
 
 class ConfigHandler:
-    '''Cette classe nous permet de manipuler la configuration en se basant sur les critères suivant :
+    ''' ##**Cette classe nous permet de manipuler la configuration en se basant sur les critères suivant :**
 
-        - ***Historisation*** : activée ou pas.
-        - ***Délai d'expiration*** : nombre des jours. '''
+        - ***Historisation*** : si elle est activée ou pas.
+        - ***Délai d'expiration*** : présenté par le nombre des jours. '''
     data = None
-    '''À priori, cette variable présente le **dictionnaire** qui constitue notre configuration. '''
+    '''À priori, cette variable présente le dictionnaire qui constitue notre configuration. '''
     
     def __init__(self):
         if ConfigHandler.data != None:

@@ -35,14 +35,26 @@ from datetime import date, timedelta
 
 
 class ServerDistant:
+    &#39;&#39;&#39;##**Pour gérer le serveur distant.**&#39;&#39;&#39;
     
     session=None
+    &#39;&#39;&#39;La variable qui constitue une session du serveur distant.&#39;&#39;&#39;
 
     def __init__(self,server_address,username,password):
         self.session=ftplib.FTP(server_address,username,password)
     
     
     def add_file(self,file,hash):
+        &#39;&#39;&#39;Manipulation des fichiers Ajoutés ou déjà existants selon des critères bien définis qui concernent *l&#39;historisation*, ceci est expliqué par le tableau suivant :
+
+        |     | False     | True | 
+        | :---:   | :-----------: | :---: |
+        |     | -----   | ----- |
+        | ficher existant | on étend le délai l&#39;expiration et on supprime le reste | on ajoute |
+        |  -----   | -----   | ----- |
+        | nouveau fichier | on supprime tout et on rajoute  | on étend le délai d&#34;expiration |
+
+        &#39;&#39;&#39;
         config = ConfigHandler()
         db=  DbHandler(environ.get(&#39;DB_HOST&#39;),environ.get(&#39;DB_USER&#39;),environ.get(&#39;DB_PASSWORD&#39;),environ.get(&#39;DB_NAME&#39;))
         expiration_date =  date.today() + timedelta(days=  int(config.get_expired_in()))
@@ -67,9 +79,11 @@ class ServerDistant:
         db.close_connection()
          
     def delete_file(self,filename):
+        &#39;&#39;&#39;Suppression du fichier.&#39;&#39;&#39;
         self.session.delete(filename)
     
     def close_connection(self):
+        &#39;&#39;&#39;Pour se déconnecter.&#39;&#39;&#39;
         self.session.quit()</code></pre>
 </details>
 </section>
@@ -87,20 +101,32 @@ class ServerDistant:
 <span>(</span><span>server_address, username, password)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><h2 id="pour-gerer-le-serveur-distant"><strong>Pour gérer le serveur distant.</strong></h2></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class ServerDistant:
+    &#39;&#39;&#39;##**Pour gérer le serveur distant.**&#39;&#39;&#39;
     
     session=None
+    &#39;&#39;&#39;La variable qui constitue une session du serveur distant.&#39;&#39;&#39;
 
     def __init__(self,server_address,username,password):
         self.session=ftplib.FTP(server_address,username,password)
     
     
     def add_file(self,file,hash):
+        &#39;&#39;&#39;Manipulation des fichiers Ajoutés ou déjà existants selon des critères bien définis qui concernent *l&#39;historisation*, ceci est expliqué par le tableau suivant :
+
+        |     | False     | True | 
+        | :---:   | :-----------: | :---: |
+        |     | -----   | ----- |
+        | ficher existant | on étend le délai l&#39;expiration et on supprime le reste | on ajoute |
+        |  -----   | -----   | ----- |
+        | nouveau fichier | on supprime tout et on rajoute  | on étend le délai d&#34;expiration |
+
+        &#39;&#39;&#39;
         config = ConfigHandler()
         db=  DbHandler(environ.get(&#39;DB_HOST&#39;),environ.get(&#39;DB_USER&#39;),environ.get(&#39;DB_PASSWORD&#39;),environ.get(&#39;DB_NAME&#39;))
         expiration_date =  date.today() + timedelta(days=  int(config.get_expired_in()))
@@ -125,16 +151,18 @@ class ServerDistant:
         db.close_connection()
          
     def delete_file(self,filename):
+        &#39;&#39;&#39;Suppression du fichier.&#39;&#39;&#39;
         self.session.delete(filename)
     
     def close_connection(self):
+        &#39;&#39;&#39;Pour se déconnecter.&#39;&#39;&#39;
         self.session.quit()</code></pre>
 </details>
 <h3>Class variables</h3>
 <dl>
 <dt id="app.modules.ServerDistant.ServerDistant.session"><code class="name">var <span class="ident">session</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>La variable qui constitue une session du serveur distant.</p></div>
 </dd>
 </dl>
 <h3>Methods</h3>
@@ -143,12 +171,53 @@ class ServerDistant:
 <span>def <span class="ident">add_file</span></span>(<span>self, file, hash)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Manipulation des fichiers Ajoutés ou déjà existants selon des critères bien définis qui concernent <em>l'historisation</em>, ceci est expliqué par le tableau suivant :</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;"></th>
+<th style="text-align: center;">False</th>
+<th style="text-align: center;">True</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">-----</td>
+<td style="text-align: center;">-----</td>
+</tr>
+<tr>
+<td style="text-align: center;">ficher existant</td>
+<td style="text-align: center;">on étend le délai l'expiration et on supprime le reste</td>
+<td style="text-align: center;">on ajoute</td>
+</tr>
+<tr>
+<td style="text-align: center;">-----</td>
+<td style="text-align: center;">-----</td>
+<td style="text-align: center;">-----</td>
+</tr>
+<tr>
+<td style="text-align: center;">nouveau fichier</td>
+<td style="text-align: center;">on supprime tout et on rajoute</td>
+<td style="text-align: center;">on étend le délai d"expiration</td>
+</tr>
+</tbody>
+</table></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def add_file(self,file,hash):
+    &#39;&#39;&#39;Manipulation des fichiers Ajoutés ou déjà existants selon des critères bien définis qui concernent *l&#39;historisation*, ceci est expliqué par le tableau suivant :
+
+    |     | False     | True | 
+    | :---:   | :-----------: | :---: |
+    |     | -----   | ----- |
+    | ficher existant | on étend le délai l&#39;expiration et on supprime le reste | on ajoute |
+    |  -----   | -----   | ----- |
+    | nouveau fichier | on supprime tout et on rajoute  | on étend le délai d&#34;expiration |
+
+    &#39;&#39;&#39;
     config = ConfigHandler()
     db=  DbHandler(environ.get(&#39;DB_HOST&#39;),environ.get(&#39;DB_USER&#39;),environ.get(&#39;DB_PASSWORD&#39;),environ.get(&#39;DB_NAME&#39;))
     expiration_date =  date.today() + timedelta(days=  int(config.get_expired_in()))
@@ -177,12 +246,13 @@ class ServerDistant:
 <span>def <span class="ident">close_connection</span></span>(<span>self)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Pour se déconnecter.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def close_connection(self):
+    &#39;&#39;&#39;Pour se déconnecter.&#39;&#39;&#39;
     self.session.quit()</code></pre>
 </details>
 </dd>
@@ -190,12 +260,13 @@ class ServerDistant:
 <span>def <span class="ident">delete_file</span></span>(<span>self, filename)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Suppression du fichier.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def delete_file(self,filename):
+    &#39;&#39;&#39;Suppression du fichier.&#39;&#39;&#39;
     self.session.delete(filename)</code></pre>
 </details>
 </dd>

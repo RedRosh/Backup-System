@@ -30,12 +30,15 @@
 
 
 class DbHandler:
+    &#39;&#39;&#39; ##**Cette classe nous permet de manipuler la base de données qui reflète ce qui se passe au niveau du serveur distant.** &#39;&#39;&#39;
     connection = None
+    &#39;&#39;&#39;C&#39;est la variable qui nous permet d&#39;intéragir avec notre base de données.&#39;&#39;&#39;
     
     def __init__(self, host, user, password, database):
         self.connection =  psycopg2.connect( host=host,database=database,user=user,password=password)
 
     def find_invalid_records(self):
+        &#39;&#39;&#39;Récupération d&#39;un tuple qui contient les fichiers invalides.&#39;&#39;&#39;
         sql = &#34;SELECT * FROM v_archivage_files WHERE is_expired = {} OR is_valid={};&#34;.format(True,False)
         cur = self.connection.cursor()
         cur.execute(sql)
@@ -44,6 +47,7 @@ class DbHandler:
         return records 
 
     def update_all(self,checksum=&#34;&#34;):
+        &#39;&#39;&#39;La mise à jour de la validité des fichiers contenus dans la base de données en fonction du *Hash*.&#39;&#39;&#39;
         sql = &#34;UPDATE archivage_files SET is_valid= {} WHERE checksum != &#39;{}&#39;;&#34;.format(False,checksum)
         cur = self.connection.cursor()
         cur.execute(sql)
@@ -51,6 +55,7 @@ class DbHandler:
         cur.close()
 
     def find_all(self):
+        &#39;&#39;&#39;Sélection des fichiers qui n&#39;ont pas encore dépassé le délai d&#39;expiration sous forme d&#39;un tuple&#39;&#39;&#39;
         sql = &#34;SELECT * FROM v_archivage_files WHERE is_expired = {};&#34;.format(False)
         cur = self.connection.cursor()
         cur.execute(sql)
@@ -60,6 +65,11 @@ class DbHandler:
         
         
     def add_record(self,checksum,expiration_date,filename):
+        &#39;&#39;&#39;Ajout des fichiers qui sont caractérisés par : 
+        
+        - **Nom du fichier**
+        - **Hash**
+        - **délai d&#39;expiration**&#39;&#39;&#39;
         sql = &#34;&#34;&#34;INSERT INTO archivage_files(checksum,expiration_date,filename) VALUES(%s,%s,%s)&#34;&#34;&#34;
         cur = self.connection.cursor()
         cur.execute(sql, (checksum,expiration_date ,filename))
@@ -67,6 +77,7 @@ class DbHandler:
         cur.close()
     
     def delete_record(self,file_id):
+        &#39;&#39;&#39;Suppression des fichiers.&#39;&#39;&#39;
         sql = &#34;DELETE FROM archivage_files WHERE file_id = {}&#34;.format(file_id)
         cur = self.connection.cursor()
         cur.execute(sql)
@@ -75,6 +86,7 @@ class DbHandler:
          
         
     def update_record(self,checksum,is_valid,expiration_date):
+        &#39;&#39;&#39;La mise à jour de la validité et le délai d&#39;expiration des fichiers.&#39;&#39;&#39;
         sql = &#34;UPDATE archivage_files SET expiration_date = &#39;{}&#39;, is_valid= {} WHERE checksum = &#39;{}&#39;;&#34;.format(expiration_date,is_valid,checksum)
         cur = self.connection.cursor()
         cur.execute(sql)
@@ -83,6 +95,7 @@ class DbHandler:
 
     
     def find_record(self,checksum):
+        &#39;&#39;&#39;Récupération des fichiers non expirés.&#39;&#39;&#39;
         sql = &#34;SELECT * FROM v_archivage_files WHERE checksum = &#39;{}&#39; AND is_expired = {};&#34;.format(checksum,False)
         cur = self.connection.cursor()
         cur.execute(sql)
@@ -91,6 +104,7 @@ class DbHandler:
         return records 
             
     def close_connection(self):
+        &#39;&#39;&#39;Déconnexion.&#39;&#39;&#39;
         self.connection.close()
 
 
@@ -111,18 +125,21 @@ class DbHandler:
 <span>(</span><span>host, user, password, database)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><h2 id="cette-classe-nous-permet-de-manipuler-la-base-de-donnees-qui-reflete-ce-qui-se-passe-au-niveau-du-serveur-distant"><strong>Cette classe nous permet de manipuler la base de données qui reflète ce qui se passe au niveau du serveur distant.</strong></h2></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class DbHandler:
+    &#39;&#39;&#39; ##**Cette classe nous permet de manipuler la base de données qui reflète ce qui se passe au niveau du serveur distant.** &#39;&#39;&#39;
     connection = None
+    &#39;&#39;&#39;C&#39;est la variable qui nous permet d&#39;intéragir avec notre base de données.&#39;&#39;&#39;
     
     def __init__(self, host, user, password, database):
         self.connection =  psycopg2.connect( host=host,database=database,user=user,password=password)
 
     def find_invalid_records(self):
+        &#39;&#39;&#39;Récupération d&#39;un tuple qui contient les fichiers invalides.&#39;&#39;&#39;
         sql = &#34;SELECT * FROM v_archivage_files WHERE is_expired = {} OR is_valid={};&#34;.format(True,False)
         cur = self.connection.cursor()
         cur.execute(sql)
@@ -131,6 +148,7 @@ class DbHandler:
         return records 
 
     def update_all(self,checksum=&#34;&#34;):
+        &#39;&#39;&#39;La mise à jour de la validité des fichiers contenus dans la base de données en fonction du *Hash*.&#39;&#39;&#39;
         sql = &#34;UPDATE archivage_files SET is_valid= {} WHERE checksum != &#39;{}&#39;;&#34;.format(False,checksum)
         cur = self.connection.cursor()
         cur.execute(sql)
@@ -138,6 +156,7 @@ class DbHandler:
         cur.close()
 
     def find_all(self):
+        &#39;&#39;&#39;Sélection des fichiers qui n&#39;ont pas encore dépassé le délai d&#39;expiration sous forme d&#39;un tuple&#39;&#39;&#39;
         sql = &#34;SELECT * FROM v_archivage_files WHERE is_expired = {};&#34;.format(False)
         cur = self.connection.cursor()
         cur.execute(sql)
@@ -147,6 +166,11 @@ class DbHandler:
         
         
     def add_record(self,checksum,expiration_date,filename):
+        &#39;&#39;&#39;Ajout des fichiers qui sont caractérisés par : 
+        
+        - **Nom du fichier**
+        - **Hash**
+        - **délai d&#39;expiration**&#39;&#39;&#39;
         sql = &#34;&#34;&#34;INSERT INTO archivage_files(checksum,expiration_date,filename) VALUES(%s,%s,%s)&#34;&#34;&#34;
         cur = self.connection.cursor()
         cur.execute(sql, (checksum,expiration_date ,filename))
@@ -154,6 +178,7 @@ class DbHandler:
         cur.close()
     
     def delete_record(self,file_id):
+        &#39;&#39;&#39;Suppression des fichiers.&#39;&#39;&#39;
         sql = &#34;DELETE FROM archivage_files WHERE file_id = {}&#34;.format(file_id)
         cur = self.connection.cursor()
         cur.execute(sql)
@@ -162,6 +187,7 @@ class DbHandler:
          
         
     def update_record(self,checksum,is_valid,expiration_date):
+        &#39;&#39;&#39;La mise à jour de la validité et le délai d&#39;expiration des fichiers.&#39;&#39;&#39;
         sql = &#34;UPDATE archivage_files SET expiration_date = &#39;{}&#39;, is_valid= {} WHERE checksum = &#39;{}&#39;;&#34;.format(expiration_date,is_valid,checksum)
         cur = self.connection.cursor()
         cur.execute(sql)
@@ -170,6 +196,7 @@ class DbHandler:
 
     
     def find_record(self,checksum):
+        &#39;&#39;&#39;Récupération des fichiers non expirés.&#39;&#39;&#39;
         sql = &#34;SELECT * FROM v_archivage_files WHERE checksum = &#39;{}&#39; AND is_expired = {};&#34;.format(checksum,False)
         cur = self.connection.cursor()
         cur.execute(sql)
@@ -178,13 +205,14 @@ class DbHandler:
         return records 
             
     def close_connection(self):
+        &#39;&#39;&#39;Déconnexion.&#39;&#39;&#39;
         self.connection.close()</code></pre>
 </details>
 <h3>Class variables</h3>
 <dl>
 <dt id="app.modules.DbHandler.DbHandler.connection"><code class="name">var <span class="ident">connection</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>C'est la variable qui nous permet d'intéragir avec notre base de données.</p></div>
 </dd>
 </dl>
 <h3>Methods</h3>
@@ -193,12 +221,22 @@ class DbHandler:
 <span>def <span class="ident">add_record</span></span>(<span>self, checksum, expiration_date, filename)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Ajout des fichiers qui sont caractérisés par : </p>
+<ul>
+<li><strong>Nom du fichier</strong></li>
+<li><strong>Hash</strong></li>
+<li><strong>délai d'expiration</strong></li>
+</ul></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def add_record(self,checksum,expiration_date,filename):
+    &#39;&#39;&#39;Ajout des fichiers qui sont caractérisés par : 
+    
+    - **Nom du fichier**
+    - **Hash**
+    - **délai d&#39;expiration**&#39;&#39;&#39;
     sql = &#34;&#34;&#34;INSERT INTO archivage_files(checksum,expiration_date,filename) VALUES(%s,%s,%s)&#34;&#34;&#34;
     cur = self.connection.cursor()
     cur.execute(sql, (checksum,expiration_date ,filename))
@@ -210,12 +248,13 @@ class DbHandler:
 <span>def <span class="ident">close_connection</span></span>(<span>self)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Déconnexion.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def close_connection(self):
+    &#39;&#39;&#39;Déconnexion.&#39;&#39;&#39;
     self.connection.close()</code></pre>
 </details>
 </dd>
@@ -223,12 +262,13 @@ class DbHandler:
 <span>def <span class="ident">delete_record</span></span>(<span>self, file_id)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Suppression des fichiers.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def delete_record(self,file_id):
+    &#39;&#39;&#39;Suppression des fichiers.&#39;&#39;&#39;
     sql = &#34;DELETE FROM archivage_files WHERE file_id = {}&#34;.format(file_id)
     cur = self.connection.cursor()
     cur.execute(sql)
@@ -240,12 +280,13 @@ class DbHandler:
 <span>def <span class="ident">find_all</span></span>(<span>self)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Sélection des fichiers qui n'ont pas encore dépassé le délai d'expiration sous forme d'un tuple</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def find_all(self):
+    &#39;&#39;&#39;Sélection des fichiers qui n&#39;ont pas encore dépassé le délai d&#39;expiration sous forme d&#39;un tuple&#39;&#39;&#39;
     sql = &#34;SELECT * FROM v_archivage_files WHERE is_expired = {};&#34;.format(False)
     cur = self.connection.cursor()
     cur.execute(sql)
@@ -258,12 +299,13 @@ class DbHandler:
 <span>def <span class="ident">find_invalid_records</span></span>(<span>self)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Récupération d'un tuple qui contient les fichiers invalides.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def find_invalid_records(self):
+    &#39;&#39;&#39;Récupération d&#39;un tuple qui contient les fichiers invalides.&#39;&#39;&#39;
     sql = &#34;SELECT * FROM v_archivage_files WHERE is_expired = {} OR is_valid={};&#34;.format(True,False)
     cur = self.connection.cursor()
     cur.execute(sql)
@@ -276,12 +318,13 @@ class DbHandler:
 <span>def <span class="ident">find_record</span></span>(<span>self, checksum)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Récupération des fichiers non expirés.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def find_record(self,checksum):
+    &#39;&#39;&#39;Récupération des fichiers non expirés.&#39;&#39;&#39;
     sql = &#34;SELECT * FROM v_archivage_files WHERE checksum = &#39;{}&#39; AND is_expired = {};&#34;.format(checksum,False)
     cur = self.connection.cursor()
     cur.execute(sql)
@@ -294,12 +337,13 @@ class DbHandler:
 <span>def <span class="ident">update_all</span></span>(<span>self, checksum='')</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>La mise à jour de la validité des fichiers contenus dans la base de données en fonction du <em>Hash</em>.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def update_all(self,checksum=&#34;&#34;):
+    &#39;&#39;&#39;La mise à jour de la validité des fichiers contenus dans la base de données en fonction du *Hash*.&#39;&#39;&#39;
     sql = &#34;UPDATE archivage_files SET is_valid= {} WHERE checksum != &#39;{}&#39;;&#34;.format(False,checksum)
     cur = self.connection.cursor()
     cur.execute(sql)
@@ -311,12 +355,13 @@ class DbHandler:
 <span>def <span class="ident">update_record</span></span>(<span>self, checksum, is_valid, expiration_date)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>La mise à jour de la validité et le délai d'expiration des fichiers.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def update_record(self,checksum,is_valid,expiration_date):
+    &#39;&#39;&#39;La mise à jour de la validité et le délai d&#39;expiration des fichiers.&#39;&#39;&#39;
     sql = &#34;UPDATE archivage_files SET expiration_date = &#39;{}&#39;, is_valid= {} WHERE checksum = &#39;{}&#39;;&#34;.format(expiration_date,is_valid,checksum)
     cur = self.connection.cursor()
     cur.execute(sql)
