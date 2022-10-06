@@ -7,14 +7,26 @@ from datetime import date, timedelta
 
 
 class ServerDistant:
+    '''##**Pour gérer le serveur distant.**'''
     
     session=None
+    '''La variable qui constitue une session du serveur distant.'''
 
     def __init__(self,server_address,username,password):
         self.session=ftplib.FTP(server_address,username,password)
     
     
     def add_file(self,file,hash):
+        '''Manipulation des fichiers Ajoutés ou déjà existants selon des critères bien définis qui concernent *l'historisation*, ceci est expliqué par le tableau suivant :
+
+        |     | False     | True | 
+        | :---:   | :-----------: | :---: |
+        |     | -----   | ----- |
+        | ficher existant | on étend le délai l'expiration et on supprime le reste | on ajoute |
+        |  -----   | -----   | ----- |
+        | nouveau fichier | on supprime tout et on rajoute  | on étend le délai d"expiration |
+
+        '''
         config = ConfigHandler()
         db=  DbHandler(environ.get('DB_HOST'),environ.get('DB_USER'),environ.get('DB_PASSWORD'),environ.get('DB_NAME'))
         expiration_date =  date.today() + timedelta(days=  int(config.get_expired_in()))
@@ -39,7 +51,9 @@ class ServerDistant:
         db.close_connection()
          
     def delete_file(self,filename):
+        '''Suppression du fichier.'''
         self.session.delete(filename)
     
     def close_connection(self):
+        '''Pour se déconnecter.'''
         self.session.quit()

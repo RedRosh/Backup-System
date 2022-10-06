@@ -37,12 +37,12 @@ v = Validator(schema)
 
 
 class ConfigHandler:
-    &#39;&#39;&#39;Cette classe nous permet de manipuler la configuration en se basant sur les critères suivant :
+    &#39;&#39;&#39; ##**Cette classe nous permet de manipuler la configuration en se basant sur les critères suivant :**
 
-        - ***Historisation*** : s&#39;elle activée ou pas  
-        - ***Délai d&#39;expiration*** : nombre des jours &#39;&#39;&#39;
+        - ***Historisation*** : activée ou pas.
+        - ***Délai d&#39;expiration*** : nombre des jours. &#39;&#39;&#39;
     data = None
-    &#39;&#39;&#39;Un **dictionnaire** qui présente, à priori, notre configuration. &#39;&#39;&#39;
+    &#39;&#39;&#39;À priori, cette variable présente le dictionnaire qui constitue notre configuration. &#39;&#39;&#39;
     
     def __init__(self):
         if ConfigHandler.data != None:
@@ -59,11 +59,11 @@ class ConfigHandler:
                 exit(1)
                 
     def get_versioning(self):
-        &#39;&#39;&#39;C&#39;est le *getter* qui nous permet de récuperer la valeur de *l&#39;Historisation*&#39;&#39;&#39;
+        &#39;&#39;&#39;C&#39;est le *getter* qui nous permet de récupèrer la valeur de *l&#39;Historisation*.&#39;&#39;&#39;
         return self.data[&#39;VERSIONING&#39;]
     
     def get_expired_in(self):
-        &#39;&#39;&#39;C&#39;est le *getter* qui nous permet de récuperer la valeur du *délai d&#39;expiration*.&#39;&#39;&#39;
+        &#39;&#39;&#39;C&#39;est le *getter* qui nous permet de récupèrer la valeur du *délai d&#39;expiration*.&#39;&#39;&#39;
         return self.data[&#39;EXPIRED_IN&#39;]
         </code></pre>
 </details>
@@ -81,23 +81,22 @@ class ConfigHandler:
 <span>class <span class="ident">ConfigHandler</span></span>
 </code></dt>
 <dd>
-<div class="desc"><p>Cette classe nous permet de manipuler la configuration en se basant sur les critères suivant :</p>
+<div class="desc"><h2 id="cette-classe-nous-permet-de-manipuler-la-configuration-en-se-basant-sur-les-criteres-suivant"><strong>Cette classe nous permet de manipuler la configuration en se basant sur les critères suivant :</strong></h2>
 <ul>
-<li><strong><em>Historisation</em></strong> : s'elle activée ou pas
-</li>
-<li><strong><em>Délai d'expiration</em></strong> : nombre des jours</li>
+<li><strong><em>Historisation</em></strong> : activée ou pas.</li>
+<li><strong><em>Délai d'expiration</em></strong> : nombre des jours.</li>
 </ul></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class ConfigHandler:
-    &#39;&#39;&#39;Cette classe nous permet de manipuler la configuration en se basant sur les critères suivant :
+    &#39;&#39;&#39; ##**Cette classe nous permet de manipuler la configuration en se basant sur les critères suivant :**
 
-        - ***Historisation*** : s&#39;elle activée ou pas  
-        - ***Délai d&#39;expiration*** : nombre des jours &#39;&#39;&#39;
+        - ***Historisation*** : activée ou pas.
+        - ***Délai d&#39;expiration*** : nombre des jours. &#39;&#39;&#39;
     data = None
-    &#39;&#39;&#39;Un **dictionnaire** qui présente, à priori, notre configuration. &#39;&#39;&#39;
+    &#39;&#39;&#39;À priori, cette variable présente le dictionnaire qui constitue notre configuration. &#39;&#39;&#39;
     
     def __init__(self):
         if ConfigHandler.data != None:
@@ -114,18 +113,18 @@ class ConfigHandler:
                 exit(1)
                 
     def get_versioning(self):
-        &#39;&#39;&#39;C&#39;est le *getter* qui nous permet de récuperer la valeur de *l&#39;Historisation*&#39;&#39;&#39;
+        &#39;&#39;&#39;C&#39;est le *getter* qui nous permet de récupèrer la valeur de *l&#39;Historisation*.&#39;&#39;&#39;
         return self.data[&#39;VERSIONING&#39;]
     
     def get_expired_in(self):
-        &#39;&#39;&#39;C&#39;est le *getter* qui nous permet de récuperer la valeur du *délai d&#39;expiration*.&#39;&#39;&#39;
+        &#39;&#39;&#39;C&#39;est le *getter* qui nous permet de récupèrer la valeur du *délai d&#39;expiration*.&#39;&#39;&#39;
         return self.data[&#39;EXPIRED_IN&#39;]</code></pre>
 </details>
 <h3>Class variables</h3>
 <dl>
 <dt id="app.modules.ConfigHandler.ConfigHandler.data"><code class="name">var <span class="ident">data</span></code></dt>
 <dd>
-<div class="desc"><p>Un <strong>dictionnaire</strong> qui présente, à priori, notre configuration.</p></div>
+<div class="desc"><p>À priori, cette variable présente le dictionnaire qui constitue notre configuration.</p></div>
 </dd>
 </dl>
 <h3>Methods</h3>
@@ -134,13 +133,13 @@ class ConfigHandler:
 <span>def <span class="ident">get_expired_in</span></span>(<span>self)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>C'est le <em>getter</em> qui nous permet de récuperer la valeur du <em>délai d'expiration</em>.</p></div>
+<div class="desc"><p>C'est le <em>getter</em> qui nous permet de récupèrer la valeur du <em>délai d'expiration</em>.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def get_expired_in(self):
-    &#39;&#39;&#39;C&#39;est le *getter* qui nous permet de récuperer la valeur du *délai d&#39;expiration*.&#39;&#39;&#39;
+    &#39;&#39;&#39;C&#39;est le *getter* qui nous permet de récupèrer la valeur du *délai d&#39;expiration*.&#39;&#39;&#39;
     return self.data[&#39;EXPIRED_IN&#39;]</code></pre>
 </details>
 </dd>
@@ -148,13 +147,13 @@ class ConfigHandler:
 <span>def <span class="ident">get_versioning</span></span>(<span>self)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>C'est le <em>getter</em> qui nous permet de récuperer la valeur de <em>l'Historisation</em></p></div>
+<div class="desc"><p>C'est le <em>getter</em> qui nous permet de récupèrer la valeur de <em>l'Historisation</em>.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def get_versioning(self):
-    &#39;&#39;&#39;C&#39;est le *getter* qui nous permet de récuperer la valeur de *l&#39;Historisation*&#39;&#39;&#39;
+    &#39;&#39;&#39;C&#39;est le *getter* qui nous permet de récupèrer la valeur de *l&#39;Historisation*.&#39;&#39;&#39;
     return self.data[&#39;VERSIONING&#39;]</code></pre>
 </details>
 </dd>
