@@ -1,5 +1,8 @@
 import requests
+import logging
 
+
+logger = logging.getLogger()
 class ServerWeb :
     base_url = ''
     
@@ -8,4 +11,14 @@ class ServerWeb :
         
     def retrieve_file(self,filename):
         response = requests.get('{}{}'.format(self.base_url,filename))
-        return response.content
+        match response.status_code:
+            case 200:
+                logger.info("File retrieved successfully.")
+                return response.content
+            case 404:
+                raise Exception("File not found.")
+            case _:
+                raise Exception("An error occurred while retrieving the file.")
+        
+      
+    

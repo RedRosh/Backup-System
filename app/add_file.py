@@ -5,29 +5,32 @@ from modules.FileManager import FileManager
 from modules.ServerWeb import ServerWeb
 import logging
 
-try:
-    logger = logging.getLogger()
-    logger.info("script started")
-    db= DbHandler(environ.get('DB_HOST'),environ.get('DB_USER'),environ.get('DB_PASSWORD'),environ.get('DB_NAME'))
-    serverWeb = ServerWeb(environ.get('URL'))
-    serverDistant = ServerDistant(environ.get('ftp_server_address'),environ.get('ftp_username'),environ.get('ftp_password'))
-    file = serverWeb.retrieve_file(environ.get('FILE_NAME')) 
-    hash = FileManager.get_hash(file)
-    files = FileManager.unzip_file(file)
-    tar_file = FileManager.tar_files(files)
-    serverDistant.add_file(tar_file,hash)
-    invalid_records = db.find_invalid_records()
-    for record in invalid_records:
-        serverDistant.delete_file(record[2])
-        db.delete_record(record[0])
-
-    serverDistant.close_connection()
-    db.close_connection()
-    logger.info("script finished")
-except Exception as error:
-    logger.error(str(error))
-finally:
-    logger.info("script finished")
+if __name__ == '__main__':
+    try:   
+        logger = logging.getLogger()
+        logger.info("Script started.")
+        db= DbHandler(environ.get('DB_HOST'),environ.get('DB_USER'),environ.get('DB_PASSWORD'),environ.get('DB_NAME'))
+        serverWeb = ServerWeb(environ.get('URL'))
+        serverDistant = ServerDistant(environ.get('ftp_server_address'),environ.get('ftp_username'),environ.get('ftp_password'))
+        file = serverWeb.retrieve_file(environ.get('FILE_NAME')) 
+        hash = FileManager.get_hash(file)
+        files = FileManager.unzip_file(file)
+        tar_file = FileManager.tar_files(files)
+        serverDistant.add_file(tar_file,hash)
+        invalid_records = db.find_invalid_records()
+        for record in invalid_records:
+            serverDistant.delete_file(record[2])
+            db.delete_record(record[0])  
+    except Exception as error:
+        print(error)
+        logger.error(str(error))
+        exit(1)
+    finally:
+        serverDistant.close_connection()
+        logger.info("Server Distant Connection was closed successfully.")
+        db.close_connection()
+        logger.info("Database Connection was closed successfully.")
+        logger.info("Script finished.")
 
    
     
