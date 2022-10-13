@@ -48,7 +48,7 @@ class ConfigHandler:
                 
     def get_versioning(self):
         '''C'est le *getter* qui nous permet de récupèrer la valeur de *l'Historisation*.'''
-        return ConfigHandler.data['VERSIONING']
+        return ConfigHandler.config['VERSIONING']
     
     
     def get_expired_in(self):
