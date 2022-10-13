@@ -1,3 +1,4 @@
+from calendar import c
 from os import environ
 from modules.ConfigHandler import ConfigHandler
 from modules.DbHandler import DbHandler
@@ -34,12 +35,14 @@ if __name__ == '__main__':
         logger.info("Server Distant Connection was closed successfully.")
         db.close_connection()
         logger.info("Database Connection was closed successfully.")
-        mail_server = EmailHandler(config.get_smtp_server() ,config.get_smtp_port(),config.get_smtp_mail_sender(),config.get_smtp_password())
-        if validProcess:
-            mail_server.send_email(config.get_smtp_mail_receivers(),"Script Succeeded","Script finished")
-        else:
-            mail_server.send_email(config.get_smtp_mail_receivers(),"Process Failed","Script finished")
         logger.info("Script finished.")
+        mail_server = EmailHandler(config.get_smtp_server() ,config.get_smtp_port(),config.get_smtp_mail_sender(),config.get_smtp_password()) 
+        if config.get_notify() == 1:
+            if validProcess:
+                mail_server.send_email(config.get_smtp_mail_receivers(),"Script Succeeded","Script finished")
+            else:
+                mail_server.send_email(config.get_smtp_mail_receivers(),"Process Failed","Script finished")
+     
 
    
     

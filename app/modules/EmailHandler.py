@@ -3,6 +3,7 @@ import mimetypes
 import smtplib,ssl
 from email.message import EmailMessage
 import logging
+from modules.ConfigHandler import ConfigHandler
 
 logger = logging.getLogger()
 class EmailHandler:
@@ -18,25 +19,29 @@ class EmailHandler:
         
     def message_template(self,mail_receivers,subject,body):
         try: 
+            config = ConfigHandler()
             msg = EmailMessage()
             msg['Subject'] = subject
             msg['From'] = "Archivage Bot" 
             msg['To'] = mail_receivers
             msg.set_content(body)
-            filename="archivage_logs_"+ datetime.today().strftime('%Y-%d-%m %H:%M:%S') + '.log'
-            path ='/app/logs/logs.log'
-            ctype, encoding = mimetypes.guess_type(path)
-            if ctype is None or encoding is not None:
-                ctype = 'application/octet-stream'
-            maintype, subtype = ctype.split('/', 1)
-            with open(path, 'rb') as fp:
-                msg.add_attachment(fp.read(),
-                            maintype=maintype,
-                            subtype=subtype,
-                            filename=filename)
+            if config.get_add_attachment() == 1:
+                filename="archivage_logs_"+ datetime.today().strftime('%Y-%d-%m %H:%M:%S') + '.log'
+                path ='/app/logs/logs.log'
+                ctype, encoding = mimetypes.guess_type(path)
+                
+                if ctype is None or encoding is not None:
+                    ctype = 'application/octet-stream'
+                maintype, subtype = ctype.split('/', 1)
+                with open(path, 'rb') as fp:
+                    msg.add_attachment(fp.read(),
+                                maintype=maintype,
+                                subtype=subtype,
+                                filename=filename)
         except Exception as e:
-            logger.error(e)                     
-        return msg
+            logger.error(e)  
+        finally:                   
+            return msg
 
         
     def send_email(self,mail_receivers,subject,body):
