@@ -1,0 +1,13 @@
+app 2022-10-13 21:53:01,217 - INFO - Script started.
+app 2022-10-13 21:53:01,221 - INFO - Connection to database was established.
+app 2022-10-13 21:53:01,239 - INFO - Connection to distant server was established.
+app 2022-10-13 21:53:01,246 - INFO - File retrieved successfully.
+app 2022-10-13 21:53:01,247 - INFO - Successfully calculating hash of file.
+app 2022-10-13 21:53:01,249 - INFO - Successfully unzipped file.
+app 2022-10-13 21:53:01,250 - INFO - Successfully tarred file with name 20221310.tar.gz.
+app 2022-10-13 21:53:01,251 - INFO - Versioning is enabled.
+app 2022-10-13 21:53:01,254 - INFO - File does exist in FTP.
+app 2022-10-13 21:53:01,259 - INFO - The expiration date of the file was extended.
+app 2022-10-13 21:53:01,261 - INFO - Server Distant Connection was closed successfully.
+app 2022-10-13 21:53:01,261 - INFO - Database Connection was closed successfully.
+app 2022-10-13 21:53:01,262 - INFO - Script finished.

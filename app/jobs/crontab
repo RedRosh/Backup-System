@@ -1,0 +1,4 @@
+# START CRON JOB
+* * * * * /usr/local/bin/python /app/add_file.py
+0 12 * * * /usr/local/bin/python /app/suppression.py
+# END CRON JOB
