@@ -1,5 +1,6 @@
 VERSIONING: 1
 EXPIRED_IN: 1
+
 SMTP_PORT: 465
 SMTP_SERVER: "smtp.gmail.com"
 SMTP_PASSWORD: "tgkuspwabhnyvine"
@@ -8,3 +9,5 @@ SMTP_MAIL_RECEIVERS:
   - "ezzaimadnane1361@gmail.com"
   - "filali_rochdi_@hotmail.fr"
   - "omarelgribes07@gmail.com"
+NOTIFY: 1
+ADD_ATTACHMENT: 1

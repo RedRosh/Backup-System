@@ -4,6 +4,8 @@ from datetime import datetime
 import tarfile
 import hashlib
 import logging
+from os import path,environ
+
 
 logger = logging.getLogger()
 class FileManager:
@@ -44,4 +46,3 @@ class FileManager:
                 tar.addfile(info, BytesIO(files[filename].get('content')))
         logger.info("Successfully tarred file with name {}.".format(tf.filename))
         return tf
-        
