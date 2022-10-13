@@ -27,7 +27,10 @@
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">import requests
+import logging
 
+
+logger = logging.getLogger()
 class ServerWeb :
     &#39;&#39;&#39; ##**La classe qui gère le serveur web**.&#39;&#39;&#39;
     base_url = &#39;&#39;
@@ -38,8 +41,23 @@ class ServerWeb :
         
     def retrieve_file(self,filename):
         &#39;&#39;&#39;Récupération du fichier à partir du serveur.&#39;&#39;&#39;
+        # We are using the requests library to retrieve the file from the server.
         response = requests.get(&#39;{}{}&#39;.format(self.base_url,filename))
-        return response.content</code></pre>
+        # we got different cases that we need to handle based on the response status code.
+        match response.status_code:
+            case 200:
+                # All good, we just to return the file.
+                logger.info(&#34;File retrieved successfully.&#34;)
+                return response.content
+            case 404:
+                # The file doesn&#39;t exist.
+                raise Exception(&#34;File not found.&#34;)
+            case _:
+                # Any other case.
+                raise Exception(&#34;An error occurred while retrieving the file.&#34;)
+        
+      
+    </code></pre>
 </details>
 </section>
 <section>
@@ -71,8 +89,20 @@ class ServerWeb :
         
     def retrieve_file(self,filename):
         &#39;&#39;&#39;Récupération du fichier à partir du serveur.&#39;&#39;&#39;
+        # We are using the requests library to retrieve the file from the server.
         response = requests.get(&#39;{}{}&#39;.format(self.base_url,filename))
-        return response.content</code></pre>
+        # we got different cases that we need to handle based on the response status code.
+        match response.status_code:
+            case 200:
+                # All good, we just to return the file.
+                logger.info(&#34;File retrieved successfully.&#34;)
+                return response.content
+            case 404:
+                # The file doesn&#39;t exist.
+                raise Exception(&#34;File not found.&#34;)
+            case _:
+                # Any other case.
+                raise Exception(&#34;An error occurred while retrieving the file.&#34;)</code></pre>
 </details>
 <h3>Class variables</h3>
 <dl>
@@ -94,8 +124,20 @@ class ServerWeb :
 </summary>
 <pre><code class="python">def retrieve_file(self,filename):
     &#39;&#39;&#39;Récupération du fichier à partir du serveur.&#39;&#39;&#39;
+    # We are using the requests library to retrieve the file from the server.
     response = requests.get(&#39;{}{}&#39;.format(self.base_url,filename))
-    return response.content</code></pre>
+    # we got different cases that we need to handle based on the response status code.
+    match response.status_code:
+        case 200:
+            # All good, we just to return the file.
+            logger.info(&#34;File retrieved successfully.&#34;)
+            return response.content
+        case 404:
+            # The file doesn&#39;t exist.
+            raise Exception(&#34;File not found.&#34;)
+        case _:
+            # Any other case.
+            raise Exception(&#34;An error occurred while retrieving the file.&#34;)</code></pre>
 </details>
 </dd>
 </dl>

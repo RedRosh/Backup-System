@@ -1,2 +1,21 @@
+# Historisation
 VERSIONING: 1
+# the file will expired in xx Day(s)
 EXPIRED_IN: 1
+
+# Information about smtp server
+SMTP_PORT: 465 # smtp port
+SMTP_SERVER: "smtp.gmail.com" # server smtp
+SMTP_PASSWORD: "tgkuspwabhnyvine" # user password
+SMTP_MAIL_SENDER: "archivagebot@gmail.com" # mail sender
+# List of all the emails that will receive the mail.
+SMTP_MAIL_RECEIVERS:
+  - "ezzaimadnane1361@gmail.com"
+  - "filali_rochdi_@hotmail.fr"
+  - "omarelgribes07@gmail.com"
+
+# Send mail or not.
+NOTIFY: 1
+
+# Attach log file to the mail or not.
+ADD_ATTACHMENT: 1
