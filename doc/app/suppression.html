@@ -30,14 +30,16 @@
 from modules.DbHandler import DbHandler
 from modules.ServerDistant import ServerDistant
 
-db= DbHandler(environ.get(&#39;DB_HOST&#39;),environ.get(&#39;DB_USER&#39;),environ.get(&#39;DB_PASSWORD&#39;),environ.get(&#39;DB_NAME&#39;))
-serverDistant = ServerDistant(environ.get(&#39;ftp_server_address&#39;),environ.get(&#39;ftp_username&#39;),environ.get(&#39;ftp_password&#39;))
-invalid_records = db.find_invalid_records()
-for record in invalid_records:
-    serverDistant.delete_file(record[2])
-    db.delete_record(record[0])
-serverDistant.close_connection()
-db.close_connection()</code></pre>
+
+if __name__ == &#39;__main__&#39;:
+    db= DbHandler(environ.get(&#39;DB_HOST&#39;),environ.get(&#39;DB_USER&#39;),environ.get(&#39;DB_PASSWORD&#39;),environ.get(&#39;DB_NAME&#39;))
+    serverDistant = ServerDistant(environ.get(&#39;ftp_server_address&#39;),environ.get(&#39;ftp_username&#39;),environ.get(&#39;ftp_password&#39;))
+    invalid_records = db.find_invalid_records()
+    for record in invalid_records:
+        serverDistant.delete_file(record[2])
+        db.delete_record(record[0])
+    serverDistant.close_connection()
+    db.close_connection()</code></pre>
 </details>
 </section>
 <section>

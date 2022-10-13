@@ -26,27 +26,52 @@
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">from os import environ
+<pre><code class="python">from calendar import c
+from os import environ
+from modules.ConfigHandler import ConfigHandler
 from modules.DbHandler import DbHandler
 from modules.ServerDistant import ServerDistant
 from modules.FileManager import FileManager
 from modules.ServerWeb import ServerWeb
+from modules.EmailHandler import EmailHandler
 
-db= DbHandler(environ.get(&#39;DB_HOST&#39;),environ.get(&#39;DB_USER&#39;),environ.get(&#39;DB_PASSWORD&#39;),environ.get(&#39;DB_NAME&#39;))
-serverWeb = ServerWeb(environ.get(&#39;URL&#39;))
-serverDistant = ServerDistant(environ.get(&#39;ftp_server_address&#39;),environ.get(&#39;ftp_username&#39;),environ.get(&#39;ftp_password&#39;))
-file = serverWeb.retrieve_file(environ.get(&#39;FILE_NAME&#39;)) 
-hash = FileManager.get_hash(file)
-files = FileManager.unzip_file(file)
-tar_file = FileManager.tar_files(files)
-serverDistant.add_file(tar_file,hash)   
-invalid_records = db.find_invalid_records()
-for record in invalid_records:
-    serverDistant.delete_file(record[2])
-    db.delete_record(record[0])
+import logging
 
-serverDistant.close_connection()
-db.close_connection()
+if __name__ == &#39;__main__&#39;:
+    try:
+        validProcess = True   
+        logger = logging.getLogger()
+        config = ConfigHandler()
+        logger.info(&#34;Script started.&#34;)
+        db= DbHandler(environ.get(&#39;DB_HOST&#39;),environ.get(&#39;DB_USER&#39;),environ.get(&#39;DB_PASSWORD&#39;),environ.get(&#39;DB_NAME&#39;))
+        serverWeb = ServerWeb(environ.get(&#39;URL&#39;))
+        serverDistant = ServerDistant(environ.get(&#39;ftp_server_address&#39;),environ.get(&#39;ftp_username&#39;),environ.get(&#39;ftp_password&#39;))
+        file = serverWeb.retrieve_file(environ.get(&#39;FILE_NAME&#39;)) 
+        hash = FileManager.get_hash(file)
+        files = FileManager.unzip_file(file)
+        tar_file = FileManager.tar_files(files)
+        serverDistant.add_file(tar_file,hash)
+        invalid_records = db.find_invalid_records()
+        for record in invalid_records:
+            serverDistant.delete_file(record[2])
+            db.delete_record(record[0])  
+    except Exception as error:
+        logger.error(str(error))
+        validProcess = False
+    finally:
+        serverDistant.close_connection()
+        logger.info(&#34;Server Distant Connection was closed successfully.&#34;)
+        db.close_connection()
+        logger.info(&#34;Database Connection was closed successfully.&#34;)
+        logger.info(&#34;Script finished.&#34;)
+        mail_server = EmailHandler(config.get_smtp_server() ,config.get_smtp_port(),config.get_smtp_mail_sender(),config.get_smtp_password()) 
+        if config.get_notify() == 1:
+            if validProcess:
+                mail_server.send_email(config.get_smtp_mail_receivers(),&#34;Script Succeeded&#34;,&#34;Script finished&#34;)
+            else:
+                mail_server.send_email(config.get_smtp_mail_receivers(),&#34;Process Failed&#34;,&#34;Script finished&#34;)
+     
+
    
     
   

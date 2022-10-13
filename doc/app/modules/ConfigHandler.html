@@ -30,29 +30,45 @@
 from cerberus import Validator
 import yaml
 
-schema = {&#39;VERSIONING&#39;: {&#39;type&#39;: &#39;integer&#39;,&#39;min&#39;:0,&#39;max&#39;:1}, 
+
+schema = {&#39;VERSIONING&#39;: {&#39;type&#39;: &#39;integer&#39;,&#39;min&#39;:0,&#39;max&#39;:1},
         &#39;EXPIRED_IN&#39; : {&#39;type&#39;: &#39;integer&#39;,&#39;min&#39;:0},
-        }
+        &#39;SMTP_PORT&#39;:{&#39;type&#39;: &#39;integer&#39;,&#39;min&#39;:0},
+        &#39;SMTP_SERVER&#39;:{&#39;type&#39;: &#39;string&#39;,&#39;minlength&#39;: 8},
+        &#39;SMTP_MAIL_SENDER&#39;:{
+            &#34;type&#34;: &#34;string&#34;,
+            &#34;minlength&#34;: 8,
+            &#34;maxlength&#34;: 255,
+            &#34;regex&#34;: &#34;^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$&#34;
+        },
+        &#39;SMTP_PASSWORD&#39;:{&#39;type&#39;: &#39;string&#39;,&#39;minlength&#39;: 8},
+        &#39;SMTP_MAIL_RECEIVERS&#39; :{ &#39;type&#39;: &#39;list&#39;, &#39;schema&#39;: {&#39;type&#39;: &#39;string&#39;, &#34;regex&#34;: &#34;^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$&#34;}} ,
+        &#39;NOTIFY&#39;:{&#39;type&#39;: &#39;integer&#39;,&#39;min&#39;:0,&#39;max&#39;:1},
+        &#39;ADD_ATTACHMENT&#39;:{&#39;type&#39;: &#39;integer&#39;,&#39;min&#39;:0,&#39;max&#39;:1},
+    }
+
 v = Validator(schema)
 
 
 class ConfigHandler:
     &#39;&#39;&#39; ##**Cette classe nous permet de manipuler la configuration en se basant sur les critères suivant :**
 
-        - ***Historisation*** : activée ou pas.
-        - ***Délai d&#39;expiration*** : nombre des jours. &#39;&#39;&#39;
-    data = None
+        - ***Historisation*** : si elle est activée ou pas.
+        - ***Délai d&#39;expiration*** : présenté par le nombre des jours. &#39;&#39;&#39;
+    config = None
     &#39;&#39;&#39;À priori, cette variable présente le dictionnaire qui constitue notre configuration. &#39;&#39;&#39;
     
     def __init__(self):
-        if ConfigHandler.data != None:
+        &#39;&#39;&#39; this is the main &#39;&#39;&#39;
+        if ConfigHandler.config != None:
             return
     
         basedir = path.abspath(path.dirname(__file__))
         with open(path.join(basedir,environ.get(&#39;CONFIG_PATH&#39;)), &#34;r&#34;) as yamlfile:
-            self.data = yaml.load(yamlfile, Loader=yaml.FullLoader)
-            valid= v.validate(self.data,schema)
+            ConfigHandler.config = yaml.load(yamlfile, Loader=yaml.FullLoader)
+            valid= v.validate(self.config,schema)
             errors = v.errors
+            print(errors)
             yamlfile.close()
             if not valid:
                 print(&#39;Not valid&#39;,errors,valid)
@@ -60,12 +76,33 @@ class ConfigHandler:
                 
     def get_versioning(self):
         &#39;&#39;&#39;C&#39;est le *getter* qui nous permet de récupèrer la valeur de *l&#39;Historisation*.&#39;&#39;&#39;
-        return self.data[&#39;VERSIONING&#39;]
+        return ConfigHandler.data[&#39;VERSIONING&#39;]
+    
     
     def get_expired_in(self):
         &#39;&#39;&#39;C&#39;est le *getter* qui nous permet de récupèrer la valeur du *délai d&#39;expiration*.&#39;&#39;&#39;
-        return self.data[&#39;EXPIRED_IN&#39;]
-        </code></pre>
+        return ConfigHandler.config[&#39;EXPIRED_IN&#39;]
+    
+    def get_smtp_port(self):
+        return ConfigHandler.config[&#39;SMTP_PORT&#39;]
+
+    def get_smtp_server(self):
+        return ConfigHandler.config[&#39;SMTP_SERVER&#39;]
+    
+    def get_smtp_mail_sender(self):
+        return ConfigHandler.config[&#39;SMTP_MAIL_SENDER&#39;]
+    
+    def get_smtp_password(self):
+        return ConfigHandler.config[&#39;SMTP_PASSWORD&#39;]
+
+    def get_smtp_mail_receivers(self):
+        return ConfigHandler.config[&#39;SMTP_MAIL_RECEIVERS&#39;]
+    
+    def get_notify(self):
+        return ConfigHandler.config[&#39;NOTIFY&#39;]
+    
+    def get_add_attachment(self):
+        return ConfigHandler.config[&#39;ADD_ATTACHMENT&#39;]</code></pre>
 </details>
 </section>
 <section>
@@ -83,9 +120,10 @@ class ConfigHandler:
 <dd>
 <div class="desc"><h2 id="cette-classe-nous-permet-de-manipuler-la-configuration-en-se-basant-sur-les-criteres-suivant"><strong>Cette classe nous permet de manipuler la configuration en se basant sur les critères suivant :</strong></h2>
 <ul>
-<li><strong><em>Historisation</em></strong> : activée ou pas.</li>
-<li><strong><em>Délai d'expiration</em></strong> : nombre des jours.</li>
-</ul></div>
+<li><strong><em>Historisation</em></strong> : si elle est activée ou pas.</li>
+<li><strong><em>Délai d'expiration</em></strong> : présenté par le nombre des jours. </li>
+</ul>
+<p>this is the main</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -93,20 +131,22 @@ class ConfigHandler:
 <pre><code class="python">class ConfigHandler:
     &#39;&#39;&#39; ##**Cette classe nous permet de manipuler la configuration en se basant sur les critères suivant :**
 
-        - ***Historisation*** : activée ou pas.
-        - ***Délai d&#39;expiration*** : nombre des jours. &#39;&#39;&#39;
-    data = None
+        - ***Historisation*** : si elle est activée ou pas.
+        - ***Délai d&#39;expiration*** : présenté par le nombre des jours. &#39;&#39;&#39;
+    config = None
     &#39;&#39;&#39;À priori, cette variable présente le dictionnaire qui constitue notre configuration. &#39;&#39;&#39;
     
     def __init__(self):
-        if ConfigHandler.data != None:
+        &#39;&#39;&#39; this is the main &#39;&#39;&#39;
+        if ConfigHandler.config != None:
             return
     
         basedir = path.abspath(path.dirname(__file__))
         with open(path.join(basedir,environ.get(&#39;CONFIG_PATH&#39;)), &#34;r&#34;) as yamlfile:
-            self.data = yaml.load(yamlfile, Loader=yaml.FullLoader)
-            valid= v.validate(self.data,schema)
+            ConfigHandler.config = yaml.load(yamlfile, Loader=yaml.FullLoader)
+            valid= v.validate(self.config,schema)
             errors = v.errors
+            print(errors)
             yamlfile.close()
             if not valid:
                 print(&#39;Not valid&#39;,errors,valid)
@@ -114,21 +154,56 @@ class ConfigHandler:
                 
     def get_versioning(self):
         &#39;&#39;&#39;C&#39;est le *getter* qui nous permet de récupèrer la valeur de *l&#39;Historisation*.&#39;&#39;&#39;
-        return self.data[&#39;VERSIONING&#39;]
+        return ConfigHandler.data[&#39;VERSIONING&#39;]
+    
     
     def get_expired_in(self):
         &#39;&#39;&#39;C&#39;est le *getter* qui nous permet de récupèrer la valeur du *délai d&#39;expiration*.&#39;&#39;&#39;
-        return self.data[&#39;EXPIRED_IN&#39;]</code></pre>
+        return ConfigHandler.config[&#39;EXPIRED_IN&#39;]
+    
+    def get_smtp_port(self):
+        return ConfigHandler.config[&#39;SMTP_PORT&#39;]
+
+    def get_smtp_server(self):
+        return ConfigHandler.config[&#39;SMTP_SERVER&#39;]
+    
+    def get_smtp_mail_sender(self):
+        return ConfigHandler.config[&#39;SMTP_MAIL_SENDER&#39;]
+    
+    def get_smtp_password(self):
+        return ConfigHandler.config[&#39;SMTP_PASSWORD&#39;]
+
+    def get_smtp_mail_receivers(self):
+        return ConfigHandler.config[&#39;SMTP_MAIL_RECEIVERS&#39;]
+    
+    def get_notify(self):
+        return ConfigHandler.config[&#39;NOTIFY&#39;]
+    
+    def get_add_attachment(self):
+        return ConfigHandler.config[&#39;ADD_ATTACHMENT&#39;]</code></pre>
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="app.modules.ConfigHandler.ConfigHandler.data"><code class="name">var <span class="ident">data</span></code></dt>
+<dt id="app.modules.ConfigHandler.ConfigHandler.config"><code class="name">var <span class="ident">config</span></code></dt>
 <dd>
 <div class="desc"><p>À priori, cette variable présente le dictionnaire qui constitue notre configuration.</p></div>
 </dd>
 </dl>
 <h3>Methods</h3>
 <dl>
+<dt id="app.modules.ConfigHandler.ConfigHandler.get_add_attachment"><code class="name flex">
+<span>def <span class="ident">get_add_attachment</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_add_attachment(self):
+    return ConfigHandler.config[&#39;ADD_ATTACHMENT&#39;]</code></pre>
+</details>
+</dd>
 <dt id="app.modules.ConfigHandler.ConfigHandler.get_expired_in"><code class="name flex">
 <span>def <span class="ident">get_expired_in</span></span>(<span>self)</span>
 </code></dt>
@@ -140,7 +215,85 @@ class ConfigHandler:
 </summary>
 <pre><code class="python">def get_expired_in(self):
     &#39;&#39;&#39;C&#39;est le *getter* qui nous permet de récupèrer la valeur du *délai d&#39;expiration*.&#39;&#39;&#39;
-    return self.data[&#39;EXPIRED_IN&#39;]</code></pre>
+    return ConfigHandler.config[&#39;EXPIRED_IN&#39;]</code></pre>
+</details>
+</dd>
+<dt id="app.modules.ConfigHandler.ConfigHandler.get_notify"><code class="name flex">
+<span>def <span class="ident">get_notify</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_notify(self):
+    return ConfigHandler.config[&#39;NOTIFY&#39;]</code></pre>
+</details>
+</dd>
+<dt id="app.modules.ConfigHandler.ConfigHandler.get_smtp_mail_receivers"><code class="name flex">
+<span>def <span class="ident">get_smtp_mail_receivers</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_smtp_mail_receivers(self):
+    return ConfigHandler.config[&#39;SMTP_MAIL_RECEIVERS&#39;]</code></pre>
+</details>
+</dd>
+<dt id="app.modules.ConfigHandler.ConfigHandler.get_smtp_mail_sender"><code class="name flex">
+<span>def <span class="ident">get_smtp_mail_sender</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_smtp_mail_sender(self):
+    return ConfigHandler.config[&#39;SMTP_MAIL_SENDER&#39;]</code></pre>
+</details>
+</dd>
+<dt id="app.modules.ConfigHandler.ConfigHandler.get_smtp_password"><code class="name flex">
+<span>def <span class="ident">get_smtp_password</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_smtp_password(self):
+    return ConfigHandler.config[&#39;SMTP_PASSWORD&#39;]</code></pre>
+</details>
+</dd>
+<dt id="app.modules.ConfigHandler.ConfigHandler.get_smtp_port"><code class="name flex">
+<span>def <span class="ident">get_smtp_port</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_smtp_port(self):
+    return ConfigHandler.config[&#39;SMTP_PORT&#39;]</code></pre>
+</details>
+</dd>
+<dt id="app.modules.ConfigHandler.ConfigHandler.get_smtp_server"><code class="name flex">
+<span>def <span class="ident">get_smtp_server</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_smtp_server(self):
+    return ConfigHandler.config[&#39;SMTP_SERVER&#39;]</code></pre>
 </details>
 </dd>
 <dt id="app.modules.ConfigHandler.ConfigHandler.get_versioning"><code class="name flex">
@@ -154,7 +307,7 @@ class ConfigHandler:
 </summary>
 <pre><code class="python">def get_versioning(self):
     &#39;&#39;&#39;C&#39;est le *getter* qui nous permet de récupèrer la valeur de *l&#39;Historisation*.&#39;&#39;&#39;
-    return self.data[&#39;VERSIONING&#39;]</code></pre>
+    return ConfigHandler.data[&#39;VERSIONING&#39;]</code></pre>
 </details>
 </dd>
 </dl>
@@ -178,8 +331,15 @@ class ConfigHandler:
 <li>
 <h4><code><a title="app.modules.ConfigHandler.ConfigHandler" href="#app.modules.ConfigHandler.ConfigHandler">ConfigHandler</a></code></h4>
 <ul class="">
-<li><code><a title="app.modules.ConfigHandler.ConfigHandler.data" href="#app.modules.ConfigHandler.ConfigHandler.data">data</a></code></li>
+<li><code><a title="app.modules.ConfigHandler.ConfigHandler.config" href="#app.modules.ConfigHandler.ConfigHandler.config">config</a></code></li>
+<li><code><a title="app.modules.ConfigHandler.ConfigHandler.get_add_attachment" href="#app.modules.ConfigHandler.ConfigHandler.get_add_attachment">get_add_attachment</a></code></li>
 <li><code><a title="app.modules.ConfigHandler.ConfigHandler.get_expired_in" href="#app.modules.ConfigHandler.ConfigHandler.get_expired_in">get_expired_in</a></code></li>
+<li><code><a title="app.modules.ConfigHandler.ConfigHandler.get_notify" href="#app.modules.ConfigHandler.ConfigHandler.get_notify">get_notify</a></code></li>
+<li><code><a title="app.modules.ConfigHandler.ConfigHandler.get_smtp_mail_receivers" href="#app.modules.ConfigHandler.ConfigHandler.get_smtp_mail_receivers">get_smtp_mail_receivers</a></code></li>
+<li><code><a title="app.modules.ConfigHandler.ConfigHandler.get_smtp_mail_sender" href="#app.modules.ConfigHandler.ConfigHandler.get_smtp_mail_sender">get_smtp_mail_sender</a></code></li>
+<li><code><a title="app.modules.ConfigHandler.ConfigHandler.get_smtp_password" href="#app.modules.ConfigHandler.ConfigHandler.get_smtp_password">get_smtp_password</a></code></li>
+<li><code><a title="app.modules.ConfigHandler.ConfigHandler.get_smtp_port" href="#app.modules.ConfigHandler.ConfigHandler.get_smtp_port">get_smtp_port</a></code></li>
+<li><code><a title="app.modules.ConfigHandler.ConfigHandler.get_smtp_server" href="#app.modules.ConfigHandler.ConfigHandler.get_smtp_server">get_smtp_server</a></code></li>
 <li><code><a title="app.modules.ConfigHandler.ConfigHandler.get_versioning" href="#app.modules.ConfigHandler.ConfigHandler.get_versioning">get_versioning</a></code></li>
 </ul>
 </li>

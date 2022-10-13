@@ -26,13 +26,20 @@
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">from os import path
+<pre><code class="python">from os import path,environ
 from dotenv import load_dotenv
 from modules.ConfigHandler import ConfigHandler
+import logging
 
 
 basedir = path.abspath(path.dirname(__file__))
 load_dotenv(path.join(basedir, &#39;../.env&#39;))
+logger = logging.getLogger()
+fhandler = logging.FileHandler(filename=path.join(basedir, environ.get(&#39;LOG_FILE_PATH&#39;)), mode=&#39;w&#39;)
+formatter = logging.Formatter(&#39;{} %(asctime)s - %(levelname)s - %(message)s&#39;.format(environ.get(&#34;LOGGER_NAME&#34;)))
+fhandler.setFormatter(formatter)
+logger.addHandler(fhandler)
+logger.setLevel(logging.INFO)
 ConfigHandler()</code></pre>
 </details>
 </section>
@@ -44,6 +51,10 @@ ConfigHandler()</code></pre>
 <div class="desc"></div>
 </dd>
 <dt><code class="name"><a title="app.modules.DbHandler" href="DbHandler.html">app.modules.DbHandler</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt><code class="name"><a title="app.modules.EmailHandler" href="EmailHandler.html">app.modules.EmailHandler</a></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -83,6 +94,7 @@ ConfigHandler()</code></pre>
 <ul>
 <li><code><a title="app.modules.ConfigHandler" href="ConfigHandler.html">app.modules.ConfigHandler</a></code></li>
 <li><code><a title="app.modules.DbHandler" href="DbHandler.html">app.modules.DbHandler</a></code></li>
+<li><code><a title="app.modules.EmailHandler" href="EmailHandler.html">app.modules.EmailHandler</a></code></li>
 <li><code><a title="app.modules.FileManager" href="FileManager.html">app.modules.FileManager</a></code></li>
 <li><code><a title="app.modules.ServerDistant" href="ServerDistant.html">app.modules.ServerDistant</a></code></li>
 <li><code><a title="app.modules.ServerWeb" href="ServerWeb.html">app.modules.ServerWeb</a></code></li>

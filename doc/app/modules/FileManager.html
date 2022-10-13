@@ -31,8 +31,9 @@ from io import BytesIO
 from datetime import datetime
 import tarfile
 import hashlib
+import logging
 
-
+logger = logging.getLogger()
 class FileManager:
     &#39;&#39;&#39; ##**La classe qui nous permet de manipuler les fichiers récupérés.**&#39;&#39;&#39;
     
@@ -46,6 +47,7 @@ class FileManager:
     @staticmethod
     def get_hash(file):
         &#39;&#39;&#39;Récupération du hash.&#39;&#39;&#39;
+        logger.info(&#34;Successfully calculating hash of file.&#34;)
         return hashlib.sha256( BytesIO(file).read()).hexdigest()
         
     
@@ -54,9 +56,13 @@ class FileManager:
     def unzip_file(file):
         &#39;&#39;&#39;La fonction pour dézipper.&#39;&#39;&#39;
         zip = zipfile.ZipFile(BytesIO(file))
+        
         files= {}
         for file_details in zip.infolist():
+            if &#39;.sql&#39; not in file_details.filename:
+                raise Exception(&#34;File {} is not a sql file.&#34;.format(file_details.filename))
             files[file_details.filename.split(&#39;/&#39;)[-1]] ={&#34;content&#34; : zip.open(file_details.filename).read(),&#34;size&#34;: file_details.file_size,&#34;date_time&#34; : file_details.date_time} # content , size , datetime
+        logger.info(&#34;Successfully unzipped file.&#34;)
         return files
     
     @staticmethod
@@ -69,6 +75,7 @@ class FileManager:
                 info = tarfile.TarInfo(filename)
                 info.size = files[filename].get(&#39;size&#39;)
                 tar.addfile(info, BytesIO(files[filename].get(&#39;content&#39;)))
+        logger.info(&#34;Successfully tarred file with name {}.&#34;.format(tf.filename))
         return tf
         </code></pre>
 </details>
@@ -104,6 +111,7 @@ class FileManager:
     @staticmethod
     def get_hash(file):
         &#39;&#39;&#39;Récupération du hash.&#39;&#39;&#39;
+        logger.info(&#34;Successfully calculating hash of file.&#34;)
         return hashlib.sha256( BytesIO(file).read()).hexdigest()
         
     
@@ -112,9 +120,13 @@ class FileManager:
     def unzip_file(file):
         &#39;&#39;&#39;La fonction pour dézipper.&#39;&#39;&#39;
         zip = zipfile.ZipFile(BytesIO(file))
+        
         files= {}
         for file_details in zip.infolist():
+            if &#39;.sql&#39; not in file_details.filename:
+                raise Exception(&#34;File {} is not a sql file.&#34;.format(file_details.filename))
             files[file_details.filename.split(&#39;/&#39;)[-1]] ={&#34;content&#34; : zip.open(file_details.filename).read(),&#34;size&#34;: file_details.file_size,&#34;date_time&#34; : file_details.date_time} # content , size , datetime
+        logger.info(&#34;Successfully unzipped file.&#34;)
         return files
     
     @staticmethod
@@ -127,6 +139,7 @@ class FileManager:
                 info = tarfile.TarInfo(filename)
                 info.size = files[filename].get(&#39;size&#39;)
                 tar.addfile(info, BytesIO(files[filename].get(&#39;content&#39;)))
+        logger.info(&#34;Successfully tarred file with name {}.&#34;.format(tf.filename))
         return tf</code></pre>
 </details>
 <h3>Static methods</h3>
@@ -143,6 +156,7 @@ class FileManager:
 <pre><code class="python">@staticmethod
 def get_hash(file):
     &#39;&#39;&#39;Récupération du hash.&#39;&#39;&#39;
+    logger.info(&#34;Successfully calculating hash of file.&#34;)
     return hashlib.sha256( BytesIO(file).read()).hexdigest()</code></pre>
 </details>
 </dd>
@@ -181,6 +195,7 @@ def tar_files(files):
             info = tarfile.TarInfo(filename)
             info.size = files[filename].get(&#39;size&#39;)
             tar.addfile(info, BytesIO(files[filename].get(&#39;content&#39;)))
+    logger.info(&#34;Successfully tarred file with name {}.&#34;.format(tf.filename))
     return tf</code></pre>
 </details>
 </dd>
@@ -197,9 +212,13 @@ def tar_files(files):
 def unzip_file(file):
     &#39;&#39;&#39;La fonction pour dézipper.&#39;&#39;&#39;
     zip = zipfile.ZipFile(BytesIO(file))
+    
     files= {}
     for file_details in zip.infolist():
+        if &#39;.sql&#39; not in file_details.filename:
+            raise Exception(&#34;File {} is not a sql file.&#34;.format(file_details.filename))
         files[file_details.filename.split(&#39;/&#39;)[-1]] ={&#34;content&#34; : zip.open(file_details.filename).read(),&#34;size&#34;: file_details.file_size,&#34;date_time&#34; : file_details.date_time} # content , size , datetime
+    logger.info(&#34;Successfully unzipped file.&#34;)
     return files</code></pre>
 </details>
 </dd>
