@@ -41,6 +41,7 @@ class FileManager:
     @staticmethod
     def rename(file,name):
         &#39;&#39;&#39;Pour renommer le fichier récupéré.&#39;&#39;&#39;
+        # renaming the file.
         file.filename = name
         return file
     
@@ -48,6 +49,7 @@ class FileManager:
     def get_hash(file):
         &#39;&#39;&#39;Récupération du hash.&#39;&#39;&#39;
         logger.info(&#34;Successfully calculating hash of file.&#34;)
+        # Calculating the hash of the file using Sha256 algorithm. ( using Sha256 because it&#39;s the most secure algorithm )
         return hashlib.sha256( BytesIO(file).read()).hexdigest()
         
     
@@ -55,27 +57,37 @@ class FileManager:
     @staticmethod
     def unzip_file(file):
         &#39;&#39;&#39;La fonction pour dézipper.&#39;&#39;&#39;
+        # loading the zip file 
         zip = zipfile.ZipFile(BytesIO(file))
         
         files= {}
+        # Iterating over the files in the zip file.
         for file_details in zip.infolist():
+            # Checking if the zip contains .sql inside it.
             if &#39;.sql&#39; not in file_details.filename:
                 raise Exception(&#34;File {} is not a sql file.&#34;.format(file_details.filename))
+            # Extracting the file from the zip file + adding it to the files dictionary.
             files[file_details.filename.split(&#39;/&#39;)[-1]] ={&#34;content&#34; : zip.open(file_details.filename).read(),&#34;size&#34;: file_details.file_size,&#34;date_time&#34; : file_details.date_time} # content , size , datetime
         logger.info(&#34;Successfully unzipped file.&#34;)
+        # return a dictionary containing the files content + meta-data.
         return files
     
     @staticmethod
     def tar_files(files):
         &#39;&#39;&#39;Pour changer en format tar.&#39;&#39;&#39;
+        # Creating an empty Byte Array
         tf = BytesIO()
-        tf.filename= datetime.today().strftime(&#39;%Y%d%m%H%M%S&#39;) + &#39;.tar.gz&#39;
+        # Setting the filename 
+        tf.filename= datetime.today().strftime(&#39;%Y%d%m&#39;) + &#39;.tar.gz&#39;
         with tarfile.open(fileobj=tf, mode=&#39;w:gz&#39;) as tar:
+            # Iterating over the files dictionary.
             for filename in files.keys():
                 info = tarfile.TarInfo(filename)
                 info.size = files[filename].get(&#39;size&#39;)
+                # Add file to the tar
                 tar.addfile(info, BytesIO(files[filename].get(&#39;content&#39;)))
         logger.info(&#34;Successfully tarred file with name {}.&#34;.format(tf.filename))
+        # returning the tar file.
         return tf
         </code></pre>
 </details>
@@ -105,6 +117,7 @@ class FileManager:
     @staticmethod
     def rename(file,name):
         &#39;&#39;&#39;Pour renommer le fichier récupéré.&#39;&#39;&#39;
+        # renaming the file.
         file.filename = name
         return file
     
@@ -112,6 +125,7 @@ class FileManager:
     def get_hash(file):
         &#39;&#39;&#39;Récupération du hash.&#39;&#39;&#39;
         logger.info(&#34;Successfully calculating hash of file.&#34;)
+        # Calculating the hash of the file using Sha256 algorithm. ( using Sha256 because it&#39;s the most secure algorithm )
         return hashlib.sha256( BytesIO(file).read()).hexdigest()
         
     
@@ -119,27 +133,37 @@ class FileManager:
     @staticmethod
     def unzip_file(file):
         &#39;&#39;&#39;La fonction pour dézipper.&#39;&#39;&#39;
+        # loading the zip file 
         zip = zipfile.ZipFile(BytesIO(file))
         
         files= {}
+        # Iterating over the files in the zip file.
         for file_details in zip.infolist():
+            # Checking if the zip contains .sql inside it.
             if &#39;.sql&#39; not in file_details.filename:
                 raise Exception(&#34;File {} is not a sql file.&#34;.format(file_details.filename))
+            # Extracting the file from the zip file + adding it to the files dictionary.
             files[file_details.filename.split(&#39;/&#39;)[-1]] ={&#34;content&#34; : zip.open(file_details.filename).read(),&#34;size&#34;: file_details.file_size,&#34;date_time&#34; : file_details.date_time} # content , size , datetime
         logger.info(&#34;Successfully unzipped file.&#34;)
+        # return a dictionary containing the files content + meta-data.
         return files
     
     @staticmethod
     def tar_files(files):
         &#39;&#39;&#39;Pour changer en format tar.&#39;&#39;&#39;
+        # Creating an empty Byte Array
         tf = BytesIO()
-        tf.filename= datetime.today().strftime(&#39;%Y%d%m%H%M%S&#39;) + &#39;.tar.gz&#39;
+        # Setting the filename 
+        tf.filename= datetime.today().strftime(&#39;%Y%d%m&#39;) + &#39;.tar.gz&#39;
         with tarfile.open(fileobj=tf, mode=&#39;w:gz&#39;) as tar:
+            # Iterating over the files dictionary.
             for filename in files.keys():
                 info = tarfile.TarInfo(filename)
                 info.size = files[filename].get(&#39;size&#39;)
+                # Add file to the tar
                 tar.addfile(info, BytesIO(files[filename].get(&#39;content&#39;)))
         logger.info(&#34;Successfully tarred file with name {}.&#34;.format(tf.filename))
+        # returning the tar file.
         return tf</code></pre>
 </details>
 <h3>Static methods</h3>
@@ -157,6 +181,7 @@ class FileManager:
 def get_hash(file):
     &#39;&#39;&#39;Récupération du hash.&#39;&#39;&#39;
     logger.info(&#34;Successfully calculating hash of file.&#34;)
+    # Calculating the hash of the file using Sha256 algorithm. ( using Sha256 because it&#39;s the most secure algorithm )
     return hashlib.sha256( BytesIO(file).read()).hexdigest()</code></pre>
 </details>
 </dd>
@@ -172,6 +197,7 @@ def get_hash(file):
 <pre><code class="python">@staticmethod
 def rename(file,name):
     &#39;&#39;&#39;Pour renommer le fichier récupéré.&#39;&#39;&#39;
+    # renaming the file.
     file.filename = name
     return file</code></pre>
 </details>
@@ -188,14 +214,19 @@ def rename(file,name):
 <pre><code class="python">@staticmethod
 def tar_files(files):
     &#39;&#39;&#39;Pour changer en format tar.&#39;&#39;&#39;
+    # Creating an empty Byte Array
     tf = BytesIO()
-    tf.filename= datetime.today().strftime(&#39;%Y%d%m%H%M%S&#39;) + &#39;.tar.gz&#39;
+    # Setting the filename 
+    tf.filename= datetime.today().strftime(&#39;%Y%d%m&#39;) + &#39;.tar.gz&#39;
     with tarfile.open(fileobj=tf, mode=&#39;w:gz&#39;) as tar:
+        # Iterating over the files dictionary.
         for filename in files.keys():
             info = tarfile.TarInfo(filename)
             info.size = files[filename].get(&#39;size&#39;)
+            # Add file to the tar
             tar.addfile(info, BytesIO(files[filename].get(&#39;content&#39;)))
     logger.info(&#34;Successfully tarred file with name {}.&#34;.format(tf.filename))
+    # returning the tar file.
     return tf</code></pre>
 </details>
 </dd>
@@ -211,14 +242,19 @@ def tar_files(files):
 <pre><code class="python">@staticmethod
 def unzip_file(file):
     &#39;&#39;&#39;La fonction pour dézipper.&#39;&#39;&#39;
+    # loading the zip file 
     zip = zipfile.ZipFile(BytesIO(file))
     
     files= {}
+    # Iterating over the files in the zip file.
     for file_details in zip.infolist():
+        # Checking if the zip contains .sql inside it.
         if &#39;.sql&#39; not in file_details.filename:
             raise Exception(&#34;File {} is not a sql file.&#34;.format(file_details.filename))
+        # Extracting the file from the zip file + adding it to the files dictionary.
         files[file_details.filename.split(&#39;/&#39;)[-1]] ={&#34;content&#34; : zip.open(file_details.filename).read(),&#34;size&#34;: file_details.file_size,&#34;date_time&#34; : file_details.date_time} # content , size , datetime
     logger.info(&#34;Successfully unzipped file.&#34;)
+    # return a dictionary containing the files content + meta-data.
     return files</code></pre>
 </details>
 </dd>

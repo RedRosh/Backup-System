@@ -43,6 +43,8 @@ class ServerDistant:
     &#39;&#39;&#39;La variable qui constitue une session du serveur distant.&#39;&#39;&#39;
 
     def __init__(self,server_address,username,password):
+        &#39;&#39;&#39;Initialisation de la session.&#39;&#39;&#39;
+        # We are using the ftplib library to connect to the FTP server.
         self.session=ftplib.FTP(server_address,username,password)
         logger.info(&#34;Connection to distant server was established.&#34;)
     
@@ -58,44 +60,52 @@ class ServerDistant:
         | nouveau fichier | on supprime tout et on rajoute  | on étend le délai d&#34;expiration |
 
         &#39;&#39;&#39;
+        # This function is used to add a file to the distant server.
+        # init the config handler &amp;&amp; DbHandler
         config = ConfigHandler()
         db=  DbHandler(environ.get(&#39;DB_HOST&#39;),environ.get(&#39;DB_USER&#39;),environ.get(&#39;DB_PASSWORD&#39;),environ.get(&#39;DB_NAME&#39;))
+        # Getting the expiration date &amp;&amp; versioning.
         expiration_date =  date.today() + timedelta(days=  int(config.get_expired_in()))
         versioning = bool(int(config.get_versioning()))
         logger.info(&#39;Versioning is {}.&#39;.format( &#34;enabled&#34; if versioning else &#34;disabled&#34;))
+        # fetching All Valid records
         records =  db.find_record(hash)
+        # applying different rules according to the status of versioning.
         if  versioning:
             if len(records) ==0:
                 logger.info(&#34;File does not exist in FTP.&#34;)
-                self.session.storbinary(&#39;STOR {}&#39;.format(file.filename), BytesIO(file.getvalue()))
-                db.add_record(hash,expiration_date,file.filename)
+                
+                self.session.storbinary(&#39;STOR {}&#39;.format(file.filename), BytesIO(file.getvalue())) # adding file to the distant server.
+                db.add_record(hash,expiration_date,file.filename) # adding record to the database
                 logger.info(&#34;File was added successfully.&#34;)
             else:
                 logger.info(&#34;File does exist in FTP.&#34;)
-                db.update_record(hash,True,expiration_date)
+                db.update_record(hash,True,expiration_date) # extending the expiration date
                 logger.info(&#34;The expiration date of the file was extended.&#34;)
         else:
             if len(records) == 0:
                 logger.info(&#34;File does not exist in FTP.&#34;)
-                db.update_all()
-                logger.info(&#34;Deleting pre-existing files.&#34;)
-                self.session.storbinary(&#39;STOR {}&#39;.format(file.filename), BytesIO(file.getvalue()))
-                db.add_record(hash,expiration_date,file.filename)
+                db.update_all() # updating all records to be invalid.
+                logger.info(&#34;Deleting pre-existing files.&#34;) 
+                self.session.storbinary(&#39;STOR {}&#39;.format(file.filename), BytesIO(file.getvalue()))  # adding file to the distant server.
+                db.add_record(hash,expiration_date,file.filename)   # adding record to the database
                 logger.info(&#34;File was added successfully.&#34;)
             else:
                 logger.info(&#34;File does exist in FTP.&#34;)
-                db.update_all(records[0][1]) 
+                db.update_all(records[0][1])  # Deleting all files except the current one.
                 logger.info(&#34;Deleting pre-existing files.&#34;) 
-                db.update_record(hash,True,expiration_date)
+                db.update_record(hash,True,expiration_date)   # extending the expiration date
                 logger.info(&#34;The expiration date of the file was extended.&#34;)
 
          
     def delete_file(self,filename):
         &#39;&#39;&#39;Suppression du fichier.&#39;&#39;&#39;
+        # Deleting the file from the distant server.
         self.session.delete(filename)
     
     def close_connection(self):
         &#39;&#39;&#39;Pour se déconnecter.&#39;&#39;&#39;
+        # Closing the connection to the distant server.
         self.session.quit()</code></pre>
 </details>
 </section>
@@ -113,7 +123,8 @@ class ServerDistant:
 <span>(</span><span>server_address, username, password)</span>
 </code></dt>
 <dd>
-<div class="desc"><h2 id="pour-gerer-le-serveur-distant"><strong>Pour gérer le serveur distant.</strong></h2></div>
+<div class="desc"><h2 id="pour-gerer-le-serveur-distant"><strong>Pour gérer le serveur distant.</strong></h2>
+<p>Initialisation de la session.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -125,6 +136,8 @@ class ServerDistant:
     &#39;&#39;&#39;La variable qui constitue une session du serveur distant.&#39;&#39;&#39;
 
     def __init__(self,server_address,username,password):
+        &#39;&#39;&#39;Initialisation de la session.&#39;&#39;&#39;
+        # We are using the ftplib library to connect to the FTP server.
         self.session=ftplib.FTP(server_address,username,password)
         logger.info(&#34;Connection to distant server was established.&#34;)
     
@@ -140,44 +153,52 @@ class ServerDistant:
         | nouveau fichier | on supprime tout et on rajoute  | on étend le délai d&#34;expiration |
 
         &#39;&#39;&#39;
+        # This function is used to add a file to the distant server.
+        # init the config handler &amp;&amp; DbHandler
         config = ConfigHandler()
         db=  DbHandler(environ.get(&#39;DB_HOST&#39;),environ.get(&#39;DB_USER&#39;),environ.get(&#39;DB_PASSWORD&#39;),environ.get(&#39;DB_NAME&#39;))
+        # Getting the expiration date &amp;&amp; versioning.
         expiration_date =  date.today() + timedelta(days=  int(config.get_expired_in()))
         versioning = bool(int(config.get_versioning()))
         logger.info(&#39;Versioning is {}.&#39;.format( &#34;enabled&#34; if versioning else &#34;disabled&#34;))
+        # fetching All Valid records
         records =  db.find_record(hash)
+        # applying different rules according to the status of versioning.
         if  versioning:
             if len(records) ==0:
                 logger.info(&#34;File does not exist in FTP.&#34;)
-                self.session.storbinary(&#39;STOR {}&#39;.format(file.filename), BytesIO(file.getvalue()))
-                db.add_record(hash,expiration_date,file.filename)
+                
+                self.session.storbinary(&#39;STOR {}&#39;.format(file.filename), BytesIO(file.getvalue())) # adding file to the distant server.
+                db.add_record(hash,expiration_date,file.filename) # adding record to the database
                 logger.info(&#34;File was added successfully.&#34;)
             else:
                 logger.info(&#34;File does exist in FTP.&#34;)
-                db.update_record(hash,True,expiration_date)
+                db.update_record(hash,True,expiration_date) # extending the expiration date
                 logger.info(&#34;The expiration date of the file was extended.&#34;)
         else:
             if len(records) == 0:
                 logger.info(&#34;File does not exist in FTP.&#34;)
-                db.update_all()
-                logger.info(&#34;Deleting pre-existing files.&#34;)
-                self.session.storbinary(&#39;STOR {}&#39;.format(file.filename), BytesIO(file.getvalue()))
-                db.add_record(hash,expiration_date,file.filename)
+                db.update_all() # updating all records to be invalid.
+                logger.info(&#34;Deleting pre-existing files.&#34;) 
+                self.session.storbinary(&#39;STOR {}&#39;.format(file.filename), BytesIO(file.getvalue()))  # adding file to the distant server.
+                db.add_record(hash,expiration_date,file.filename)   # adding record to the database
                 logger.info(&#34;File was added successfully.&#34;)
             else:
                 logger.info(&#34;File does exist in FTP.&#34;)
-                db.update_all(records[0][1]) 
+                db.update_all(records[0][1])  # Deleting all files except the current one.
                 logger.info(&#34;Deleting pre-existing files.&#34;) 
-                db.update_record(hash,True,expiration_date)
+                db.update_record(hash,True,expiration_date)   # extending the expiration date
                 logger.info(&#34;The expiration date of the file was extended.&#34;)
 
          
     def delete_file(self,filename):
         &#39;&#39;&#39;Suppression du fichier.&#39;&#39;&#39;
+        # Deleting the file from the distant server.
         self.session.delete(filename)
     
     def close_connection(self):
         &#39;&#39;&#39;Pour se déconnecter.&#39;&#39;&#39;
+        # Closing the connection to the distant server.
         self.session.quit()</code></pre>
 </details>
 <h3>Class variables</h3>
@@ -240,35 +261,41 @@ class ServerDistant:
     | nouveau fichier | on supprime tout et on rajoute  | on étend le délai d&#34;expiration |
 
     &#39;&#39;&#39;
+    # This function is used to add a file to the distant server.
+    # init the config handler &amp;&amp; DbHandler
     config = ConfigHandler()
     db=  DbHandler(environ.get(&#39;DB_HOST&#39;),environ.get(&#39;DB_USER&#39;),environ.get(&#39;DB_PASSWORD&#39;),environ.get(&#39;DB_NAME&#39;))
+    # Getting the expiration date &amp;&amp; versioning.
     expiration_date =  date.today() + timedelta(days=  int(config.get_expired_in()))
     versioning = bool(int(config.get_versioning()))
     logger.info(&#39;Versioning is {}.&#39;.format( &#34;enabled&#34; if versioning else &#34;disabled&#34;))
+    # fetching All Valid records
     records =  db.find_record(hash)
+    # applying different rules according to the status of versioning.
     if  versioning:
         if len(records) ==0:
             logger.info(&#34;File does not exist in FTP.&#34;)
-            self.session.storbinary(&#39;STOR {}&#39;.format(file.filename), BytesIO(file.getvalue()))
-            db.add_record(hash,expiration_date,file.filename)
+            
+            self.session.storbinary(&#39;STOR {}&#39;.format(file.filename), BytesIO(file.getvalue())) # adding file to the distant server.
+            db.add_record(hash,expiration_date,file.filename) # adding record to the database
             logger.info(&#34;File was added successfully.&#34;)
         else:
             logger.info(&#34;File does exist in FTP.&#34;)
-            db.update_record(hash,True,expiration_date)
+            db.update_record(hash,True,expiration_date) # extending the expiration date
             logger.info(&#34;The expiration date of the file was extended.&#34;)
     else:
         if len(records) == 0:
             logger.info(&#34;File does not exist in FTP.&#34;)
-            db.update_all()
-            logger.info(&#34;Deleting pre-existing files.&#34;)
-            self.session.storbinary(&#39;STOR {}&#39;.format(file.filename), BytesIO(file.getvalue()))
-            db.add_record(hash,expiration_date,file.filename)
+            db.update_all() # updating all records to be invalid.
+            logger.info(&#34;Deleting pre-existing files.&#34;) 
+            self.session.storbinary(&#39;STOR {}&#39;.format(file.filename), BytesIO(file.getvalue()))  # adding file to the distant server.
+            db.add_record(hash,expiration_date,file.filename)   # adding record to the database
             logger.info(&#34;File was added successfully.&#34;)
         else:
             logger.info(&#34;File does exist in FTP.&#34;)
-            db.update_all(records[0][1]) 
+            db.update_all(records[0][1])  # Deleting all files except the current one.
             logger.info(&#34;Deleting pre-existing files.&#34;) 
-            db.update_record(hash,True,expiration_date)
+            db.update_record(hash,True,expiration_date)   # extending the expiration date
             logger.info(&#34;The expiration date of the file was extended.&#34;)</code></pre>
 </details>
 </dd>
@@ -283,6 +310,7 @@ class ServerDistant:
 </summary>
 <pre><code class="python">def close_connection(self):
     &#39;&#39;&#39;Pour se déconnecter.&#39;&#39;&#39;
+    # Closing the connection to the distant server.
     self.session.quit()</code></pre>
 </details>
 </dd>
@@ -297,6 +325,7 @@ class ServerDistant:
 </summary>
 <pre><code class="python">def delete_file(self,filename):
     &#39;&#39;&#39;Suppression du fichier.&#39;&#39;&#39;
+    # Deleting the file from the distant server.
     self.session.delete(filename)</code></pre>
 </details>
 </dd>

@@ -37,8 +37,10 @@ class DbHandler:
     &#39;&#39;&#39;C&#39;est la variable qui nous permet d&#39;intéragir avec notre base de données.&#39;&#39;&#39;
     
     def __init__(self, host, user, password, database):
+        # Applying singleton pattern, to avoid instantiating the class more than once.
         if(DbHandler.connection != None):
             return
+        # Connecting to the database.
         DbHandler.connection = psycopg2.connect(host=host, user=user, password=password, database=database)
         logger.info(&#34;Connection to database was established.&#34;)
 
@@ -46,28 +48,38 @@ class DbHandler:
             
     def find_invalid_records(self):
         &#39;&#39;&#39;Récupération d&#39;un tuple qui contient les fichiers invalides.&#39;&#39;&#39;
+        # Query to get all records where is_expired = true and is_valid = false.
         sql = &#34;SELECT * FROM v_archivage_files WHERE is_expired = {} OR is_valid={};&#34;.format(True,False)
         cur = DbHandler.connection.cursor()
+        # Executing the query.
         cur.execute(sql)
+        # Fetching the results.
         records= cur.fetchall()
         cur.close()
+        # returning the results.
         return records 
 
     def update_all(self,checksum=&#34;&#34;):
         &#39;&#39;&#39;La mise à jour de la validité des fichiers contenus dans la base de données en fonction du *Hash*.&#39;&#39;&#39;
+        # we are using this function in order to update the validity of the records in the database.
         sql = &#34;UPDATE archivage_files SET is_valid= {} WHERE checksum != &#39;{}&#39;;&#34;.format(False,checksum)
         cur = DbHandler.connection.cursor()
+        # Executing the query.
         cur.execute(sql)
-        DbHandler.connection.commit()
+        DbHandler.connection.commit() # Committing the changes to the database.
         cur.close()
 
     def find_all(self):
         &#39;&#39;&#39;Sélection des fichiers qui n&#39;ont pas encore dépassé le délai d&#39;expiration sous forme d&#39;un tuple.&#39;&#39;&#39;
+        # Query to get all records where is_expired = false.
         sql = &#34;SELECT * FROM v_archivage_files WHERE is_expired = {};&#34;.format(False)
         cur = DbHandler.connection.cursor()
+        # Executing the query.
         cur.execute(sql)
+        # Fetching the results.
         records= cur.fetchall()
         cur.close()
+        # returning the results.
         return records 
         
         
@@ -77,18 +89,21 @@ class DbHandler:
         - **Nom du fichier**
         - **Hash**
         - **délai d&#39;expiration**&#39;&#39;&#39;
+        # inserting new record to our database
         sql = &#34;&#34;&#34;INSERT INTO archivage_files(checksum,expiration_date,filename) VALUES(%s,%s,%s)&#34;&#34;&#34;
         cur = DbHandler.connection.cursor()
         cur.execute(sql, (checksum,expiration_date ,filename))
-        DbHandler.connection.commit()
+        DbHandler.connection.commit() # Committing the changes to the database.
         cur.close()
     
     def delete_record(self,file_id):
         &#39;&#39;&#39;Suppression des fichiers.&#39;&#39;&#39;
+        # Query to delete record based on file_id.
         sql = &#34;DELETE FROM archivage_files WHERE file_id = {}&#34;.format(file_id)
         cur = DbHandler.connection.cursor()
+        # Executing the query.
         cur.execute(sql)
-        DbHandler.connection.commit()
+        DbHandler.connection.commit() # Committing the changes to the database.
         cur.close()
          
         
@@ -96,18 +111,23 @@ class DbHandler:
         &#39;&#39;&#39;La mise à jour de la validité et le délai d&#39;expiration des fichiers.&#39;&#39;&#39;
         sql = &#34;UPDATE archivage_files SET expiration_date = &#39;{}&#39;, is_valid= {} WHERE checksum = &#39;{}&#39;;&#34;.format(expiration_date,is_valid,checksum)
         cur = DbHandler.connection.cursor()
+        # Executing the query.
         cur.execute(sql)
-        DbHandler.connection.commit()
+        DbHandler.connection.commit() # Committing the changes to the database.
         cur.close()
 
     
     def find_record(self,checksum):
         &#39;&#39;&#39;Récupération des fichiers non expirés.&#39;&#39;&#39;
+        # Query to get  records based on checksum and is_expired = false.
         sql = &#34;SELECT * FROM v_archivage_files WHERE checksum = &#39;{}&#39; AND is_expired = {};&#34;.format(checksum,False)
         cur = DbHandler.connection.cursor()
+        # Executing the query.
         cur.execute(sql)
+        # Fetching the results.
         records= cur.fetchall()
         cur.close()
+        # returning the results.
         return records 
             
     def close_connection(self):
@@ -143,8 +163,10 @@ class DbHandler:
     &#39;&#39;&#39;C&#39;est la variable qui nous permet d&#39;intéragir avec notre base de données.&#39;&#39;&#39;
     
     def __init__(self, host, user, password, database):
+        # Applying singleton pattern, to avoid instantiating the class more than once.
         if(DbHandler.connection != None):
             return
+        # Connecting to the database.
         DbHandler.connection = psycopg2.connect(host=host, user=user, password=password, database=database)
         logger.info(&#34;Connection to database was established.&#34;)
 
@@ -152,28 +174,38 @@ class DbHandler:
             
     def find_invalid_records(self):
         &#39;&#39;&#39;Récupération d&#39;un tuple qui contient les fichiers invalides.&#39;&#39;&#39;
+        # Query to get all records where is_expired = true and is_valid = false.
         sql = &#34;SELECT * FROM v_archivage_files WHERE is_expired = {} OR is_valid={};&#34;.format(True,False)
         cur = DbHandler.connection.cursor()
+        # Executing the query.
         cur.execute(sql)
+        # Fetching the results.
         records= cur.fetchall()
         cur.close()
+        # returning the results.
         return records 
 
     def update_all(self,checksum=&#34;&#34;):
         &#39;&#39;&#39;La mise à jour de la validité des fichiers contenus dans la base de données en fonction du *Hash*.&#39;&#39;&#39;
+        # we are using this function in order to update the validity of the records in the database.
         sql = &#34;UPDATE archivage_files SET is_valid= {} WHERE checksum != &#39;{}&#39;;&#34;.format(False,checksum)
         cur = DbHandler.connection.cursor()
+        # Executing the query.
         cur.execute(sql)
-        DbHandler.connection.commit()
+        DbHandler.connection.commit() # Committing the changes to the database.
         cur.close()
 
     def find_all(self):
         &#39;&#39;&#39;Sélection des fichiers qui n&#39;ont pas encore dépassé le délai d&#39;expiration sous forme d&#39;un tuple.&#39;&#39;&#39;
+        # Query to get all records where is_expired = false.
         sql = &#34;SELECT * FROM v_archivage_files WHERE is_expired = {};&#34;.format(False)
         cur = DbHandler.connection.cursor()
+        # Executing the query.
         cur.execute(sql)
+        # Fetching the results.
         records= cur.fetchall()
         cur.close()
+        # returning the results.
         return records 
         
         
@@ -183,18 +215,21 @@ class DbHandler:
         - **Nom du fichier**
         - **Hash**
         - **délai d&#39;expiration**&#39;&#39;&#39;
+        # inserting new record to our database
         sql = &#34;&#34;&#34;INSERT INTO archivage_files(checksum,expiration_date,filename) VALUES(%s,%s,%s)&#34;&#34;&#34;
         cur = DbHandler.connection.cursor()
         cur.execute(sql, (checksum,expiration_date ,filename))
-        DbHandler.connection.commit()
+        DbHandler.connection.commit() # Committing the changes to the database.
         cur.close()
     
     def delete_record(self,file_id):
         &#39;&#39;&#39;Suppression des fichiers.&#39;&#39;&#39;
+        # Query to delete record based on file_id.
         sql = &#34;DELETE FROM archivage_files WHERE file_id = {}&#34;.format(file_id)
         cur = DbHandler.connection.cursor()
+        # Executing the query.
         cur.execute(sql)
-        DbHandler.connection.commit()
+        DbHandler.connection.commit() # Committing the changes to the database.
         cur.close()
          
         
@@ -202,18 +237,23 @@ class DbHandler:
         &#39;&#39;&#39;La mise à jour de la validité et le délai d&#39;expiration des fichiers.&#39;&#39;&#39;
         sql = &#34;UPDATE archivage_files SET expiration_date = &#39;{}&#39;, is_valid= {} WHERE checksum = &#39;{}&#39;;&#34;.format(expiration_date,is_valid,checksum)
         cur = DbHandler.connection.cursor()
+        # Executing the query.
         cur.execute(sql)
-        DbHandler.connection.commit()
+        DbHandler.connection.commit() # Committing the changes to the database.
         cur.close()
 
     
     def find_record(self,checksum):
         &#39;&#39;&#39;Récupération des fichiers non expirés.&#39;&#39;&#39;
+        # Query to get  records based on checksum and is_expired = false.
         sql = &#34;SELECT * FROM v_archivage_files WHERE checksum = &#39;{}&#39; AND is_expired = {};&#34;.format(checksum,False)
         cur = DbHandler.connection.cursor()
+        # Executing the query.
         cur.execute(sql)
+        # Fetching the results.
         records= cur.fetchall()
         cur.close()
+        # returning the results.
         return records 
             
     def close_connection(self):
@@ -249,10 +289,11 @@ class DbHandler:
     - **Nom du fichier**
     - **Hash**
     - **délai d&#39;expiration**&#39;&#39;&#39;
+    # inserting new record to our database
     sql = &#34;&#34;&#34;INSERT INTO archivage_files(checksum,expiration_date,filename) VALUES(%s,%s,%s)&#34;&#34;&#34;
     cur = DbHandler.connection.cursor()
     cur.execute(sql, (checksum,expiration_date ,filename))
-    DbHandler.connection.commit()
+    DbHandler.connection.commit() # Committing the changes to the database.
     cur.close()</code></pre>
 </details>
 </dd>
@@ -281,10 +322,12 @@ class DbHandler:
 </summary>
 <pre><code class="python">def delete_record(self,file_id):
     &#39;&#39;&#39;Suppression des fichiers.&#39;&#39;&#39;
+    # Query to delete record based on file_id.
     sql = &#34;DELETE FROM archivage_files WHERE file_id = {}&#34;.format(file_id)
     cur = DbHandler.connection.cursor()
+    # Executing the query.
     cur.execute(sql)
-    DbHandler.connection.commit()
+    DbHandler.connection.commit() # Committing the changes to the database.
     cur.close()</code></pre>
 </details>
 </dd>
@@ -299,11 +342,15 @@ class DbHandler:
 </summary>
 <pre><code class="python">def find_all(self):
     &#39;&#39;&#39;Sélection des fichiers qui n&#39;ont pas encore dépassé le délai d&#39;expiration sous forme d&#39;un tuple.&#39;&#39;&#39;
+    # Query to get all records where is_expired = false.
     sql = &#34;SELECT * FROM v_archivage_files WHERE is_expired = {};&#34;.format(False)
     cur = DbHandler.connection.cursor()
+    # Executing the query.
     cur.execute(sql)
+    # Fetching the results.
     records= cur.fetchall()
     cur.close()
+    # returning the results.
     return records </code></pre>
 </details>
 </dd>
@@ -318,11 +365,15 @@ class DbHandler:
 </summary>
 <pre><code class="python">def find_invalid_records(self):
     &#39;&#39;&#39;Récupération d&#39;un tuple qui contient les fichiers invalides.&#39;&#39;&#39;
+    # Query to get all records where is_expired = true and is_valid = false.
     sql = &#34;SELECT * FROM v_archivage_files WHERE is_expired = {} OR is_valid={};&#34;.format(True,False)
     cur = DbHandler.connection.cursor()
+    # Executing the query.
     cur.execute(sql)
+    # Fetching the results.
     records= cur.fetchall()
     cur.close()
+    # returning the results.
     return records </code></pre>
 </details>
 </dd>
@@ -337,11 +388,15 @@ class DbHandler:
 </summary>
 <pre><code class="python">def find_record(self,checksum):
     &#39;&#39;&#39;Récupération des fichiers non expirés.&#39;&#39;&#39;
+    # Query to get  records based on checksum and is_expired = false.
     sql = &#34;SELECT * FROM v_archivage_files WHERE checksum = &#39;{}&#39; AND is_expired = {};&#34;.format(checksum,False)
     cur = DbHandler.connection.cursor()
+    # Executing the query.
     cur.execute(sql)
+    # Fetching the results.
     records= cur.fetchall()
     cur.close()
+    # returning the results.
     return records </code></pre>
 </details>
 </dd>
@@ -356,10 +411,12 @@ class DbHandler:
 </summary>
 <pre><code class="python">def update_all(self,checksum=&#34;&#34;):
     &#39;&#39;&#39;La mise à jour de la validité des fichiers contenus dans la base de données en fonction du *Hash*.&#39;&#39;&#39;
+    # we are using this function in order to update the validity of the records in the database.
     sql = &#34;UPDATE archivage_files SET is_valid= {} WHERE checksum != &#39;{}&#39;;&#34;.format(False,checksum)
     cur = DbHandler.connection.cursor()
+    # Executing the query.
     cur.execute(sql)
-    DbHandler.connection.commit()
+    DbHandler.connection.commit() # Committing the changes to the database.
     cur.close()</code></pre>
 </details>
 </dd>
@@ -376,8 +433,9 @@ class DbHandler:
     &#39;&#39;&#39;La mise à jour de la validité et le délai d&#39;expiration des fichiers.&#39;&#39;&#39;
     sql = &#34;UPDATE archivage_files SET expiration_date = &#39;{}&#39;, is_valid= {} WHERE checksum = &#39;{}&#39;;&#34;.format(expiration_date,is_valid,checksum)
     cur = DbHandler.connection.cursor()
+    # Executing the query.
     cur.execute(sql)
-    DbHandler.connection.commit()
+    DbHandler.connection.commit() # Committing the changes to the database.
     cur.close()</code></pre>
 </details>
 </dd>
