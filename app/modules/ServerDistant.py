@@ -29,7 +29,7 @@ class ServerDistant:
                 logger.info("File does not exist in FTP.")
                 self.session.storbinary('STOR {}'.format(file.filename), BytesIO(file.getvalue()))
                 db.add_record(hash,expiration_date,file.filename)
-                logger.info("File added successfully.")
+                logger.info("File was added successfully.")
             else:
                 logger.info("File does exist in FTP.")
                 db.update_record(hash,True,expiration_date)
@@ -41,7 +41,7 @@ class ServerDistant:
                 logger.info("Deleting pre-existing files.")
                 self.session.storbinary('STOR {}'.format(file.filename), BytesIO(file.getvalue()))
                 db.add_record(hash,expiration_date,file.filename)
-                logger.info("File added successfully.")
+                logger.info("File was added successfully.")
             else:
                 logger.info("File does exist in FTP.")
                 db.update_all(records[0][1]) 

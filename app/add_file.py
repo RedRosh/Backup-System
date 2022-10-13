@@ -1,13 +1,18 @@
 from os import environ
+from modules.ConfigHandler import ConfigHandler
 from modules.DbHandler import DbHandler
 from modules.ServerDistant import ServerDistant
 from modules.FileManager import FileManager
 from modules.ServerWeb import ServerWeb
+from modules.EmailHandler import EmailHandler
+
 import logging
 
 if __name__ == '__main__':
-    try:   
+    try:
+        validProcess = True   
         logger = logging.getLogger()
+        config = ConfigHandler()
         logger.info("Script started.")
         db= DbHandler(environ.get('DB_HOST'),environ.get('DB_USER'),environ.get('DB_PASSWORD'),environ.get('DB_NAME'))
         serverWeb = ServerWeb(environ.get('URL'))
@@ -22,14 +27,18 @@ if __name__ == '__main__':
             serverDistant.delete_file(record[2])
             db.delete_record(record[0])  
     except Exception as error:
-        print(error)
         logger.error(str(error))
-        exit(1)
+        validProcess = False
     finally:
         serverDistant.close_connection()
         logger.info("Server Distant Connection was closed successfully.")
         db.close_connection()
         logger.info("Database Connection was closed successfully.")
+        mail_server = EmailHandler(config.get_smtp_server() ,config.get_smtp_port(),config.get_smtp_mail_sender(),config.get_smtp_password())
+        if validProcess:
+            mail_server.send_email(config.get_smtp_mail_receivers(),"Script Succeeded","Script finished")
+        else:
+            mail_server.send_email(config.get_smtp_mail_receivers(),"Process Failed","Script finished")
         logger.info("Script finished.")
 
    

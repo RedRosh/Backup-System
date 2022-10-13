@@ -1,25 +1,39 @@
 from os import path,environ
+import re
+from this import d
 from cerberus import Validator
 import yaml
 
+
 schema = {'VERSIONING': {'type': 'integer','min':0,'max':1},
         'EXPIRED_IN' : {'type': 'integer','min':0},
-        }
+        'SMTP_PORT':{'type': 'integer','min':0},
+        'SMTP_SERVER':{'type': 'string','minlength': 8},
+        'SMTP_MAIL_SENDER':{
+            "type": "string",
+            "minlength": 8,
+            "maxlength": 255,
+            "regex": "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$"
+        },
+        'SMTP_PASSWORD':{'type': 'string','minlength': 8},
+        'SMTP_MAIL_RECEIVERS' :{ 'type': 'list', 'schema': {'type': 'string', "regex": "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$"} }
+    }
+
 v = Validator(schema)
 
 
 class ConfigHandler:
-    data = None
+    config = None
     
     def __init__(self):
         ''' this is the main '''
-        if ConfigHandler.data != None:
+        if ConfigHandler.config != None:
             return
     
         basedir = path.abspath(path.dirname(__file__))
         with open(path.join(basedir,environ.get('CONFIG_PATH')), "r") as yamlfile:
-            self.data = yaml.load(yamlfile, Loader=yaml.FullLoader)
-            valid= v.validate(self.data,schema)
+            ConfigHandler.config = yaml.load(yamlfile, Loader=yaml.FullLoader)
+            valid= v.validate(self.config,schema)
             errors = v.errors
             yamlfile.close()
             if not valid:
@@ -27,8 +41,22 @@ class ConfigHandler:
                 exit(1)
                 
     def get_versioning(self):
-        return self.data['VERSIONING']
+        return ConfigHandler.config['VERSIONING']
     
     def get_expired_in(self):
-        return self.data['EXPIRED_IN']
-        
+        return ConfigHandler.config['EXPIRED_IN']
+    
+    def get_smtp_port(self):
+        return ConfigHandler.config['SMTP_PORT']
+
+    def get_smtp_server(self):
+        return ConfigHandler.config['SMTP_SERVER']
+    
+    def get_smtp_mail_sender(self):
+        return ConfigHandler.config['SMTP_MAIL_SENDER']
+    
+    def get_smtp_password(self):
+        return ConfigHandler.config['SMTP_PASSWORD']
+
+    def get_smtp_mail_receivers(self):
+        return ConfigHandler.config['SMTP_MAIL_RECEIVERS']
