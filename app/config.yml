@@ -8,3 +8,5 @@ SMTP_MAIL_RECEIVERS:
   - "ezzaimadnane1361@gmail.com"
   - "filali_rochdi_@hotmail.fr"
   - "omarelgribes07@gmail.com"
+NOTIFY: 1
+ADD_ATTACHMENT: 1

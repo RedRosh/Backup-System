@@ -1,6 +1,4 @@
 from os import path,environ
-import re
-from this import d
 from cerberus import Validator
 import yaml
 
@@ -16,7 +14,9 @@ schema = {'VERSIONING': {'type': 'integer','min':0,'max':1},
             "regex": "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$"
         },
         'SMTP_PASSWORD':{'type': 'string','minlength': 8},
-        'SMTP_MAIL_RECEIVERS' :{ 'type': 'list', 'schema': {'type': 'string', "regex": "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$"} }
+        'SMTP_MAIL_RECEIVERS' :{ 'type': 'list', 'schema': {'type': 'string', "regex": "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$"}} ,
+        'NOTIFY':{'type': 'integer','min':0,'max':1},
+        'ADD_ATTACHMENT':{'type': 'integer','min':0,'max':1},
     }
 
 v = Validator(schema)
@@ -35,6 +35,7 @@ class ConfigHandler:
             ConfigHandler.config = yaml.load(yamlfile, Loader=yaml.FullLoader)
             valid= v.validate(self.config,schema)
             errors = v.errors
+            print(errors)
             yamlfile.close()
             if not valid:
                 print('Not valid',errors,valid)
@@ -60,3 +61,9 @@ class ConfigHandler:
 
     def get_smtp_mail_receivers(self):
         return ConfigHandler.config['SMTP_MAIL_RECEIVERS']
+    
+    def get_notify(self):
+        return ConfigHandler.config['NOTIFY']
+    
+    def get_add_attachment(self):
+        return ConfigHandler.config['ADD_ATTACHMENT']
