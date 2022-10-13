@@ -52,12 +52,12 @@ class ServerDistant:
     def add_file(self,file,hash):
         &#39;&#39;&#39;Manipulation des fichiers Ajoutés ou déjà existants selon des critères bien définis qui concernent *l&#39;historisation*, ceci est expliqué par le tableau suivant :
 
-        |     | False     | True | 
+        |     | Historisation : False     | Historisation : True | 
         | :---:   | :-----------: | :---: |
         |     | -----   | ----- |
-        | ficher existant | on étend le délai l&#39;expiration et on supprime le reste | on ajoute |
+        | **ficher existant** | on étend le délai d&#39;expiration et on supprime le reste | on étend le délai d&#39;expiration |
         |  -----   | -----   | ----- |
-        | nouveau fichier | on supprime tout et on rajoute  | on étend le délai d&#34;expiration |
+        | **nouveau fichier** | on supprime tout et on ajoute  | on ajoute simplement  |
 
         &#39;&#39;&#39;
         # This function is used to add a file to the distant server.
@@ -145,12 +145,12 @@ class ServerDistant:
     def add_file(self,file,hash):
         &#39;&#39;&#39;Manipulation des fichiers Ajoutés ou déjà existants selon des critères bien définis qui concernent *l&#39;historisation*, ceci est expliqué par le tableau suivant :
 
-        |     | False     | True | 
+        |     | Historisation : False     | Historisation : True | 
         | :---:   | :-----------: | :---: |
         |     | -----   | ----- |
-        | ficher existant | on étend le délai l&#39;expiration et on supprime le reste | on ajoute |
+        | **ficher existant** | on étend le délai d&#39;expiration et on supprime le reste | on étend le délai d&#39;expiration |
         |  -----   | -----   | ----- |
-        | nouveau fichier | on supprime tout et on rajoute  | on étend le délai d&#34;expiration |
+        | **nouveau fichier** | on supprime tout et on ajoute  | on ajoute simplement  |
 
         &#39;&#39;&#39;
         # This function is used to add a file to the distant server.
@@ -219,8 +219,8 @@ class ServerDistant:
 <thead>
 <tr>
 <th style="text-align: center;"></th>
-<th style="text-align: center;">False</th>
-<th style="text-align: center;">True</th>
+<th style="text-align: center;">Historisation : False</th>
+<th style="text-align: center;">Historisation : True</th>
 </tr>
 </thead>
 <tbody>
@@ -230,9 +230,9 @@ class ServerDistant:
 <td style="text-align: center;">-----</td>
 </tr>
 <tr>
-<td style="text-align: center;">ficher existant</td>
-<td style="text-align: center;">on étend le délai l'expiration et on supprime le reste</td>
-<td style="text-align: center;">on ajoute</td>
+<td style="text-align: center;"><strong>ficher existant</strong></td>
+<td style="text-align: center;">on étend le délai d'expiration et on supprime le reste</td>
+<td style="text-align: center;">on étend le délai d'expiration</td>
 </tr>
 <tr>
 <td style="text-align: center;">-----</td>
@@ -240,9 +240,9 @@ class ServerDistant:
 <td style="text-align: center;">-----</td>
 </tr>
 <tr>
-<td style="text-align: center;">nouveau fichier</td>
-<td style="text-align: center;">on supprime tout et on rajoute</td>
-<td style="text-align: center;">on étend le délai d"expiration</td>
+<td style="text-align: center;"><strong>nouveau fichier</strong></td>
+<td style="text-align: center;">on supprime tout et on ajoute</td>
+<td style="text-align: center;">on ajoute simplement</td>
 </tr>
 </tbody>
 </table></div>
@@ -253,12 +253,12 @@ class ServerDistant:
 <pre><code class="python">def add_file(self,file,hash):
     &#39;&#39;&#39;Manipulation des fichiers Ajoutés ou déjà existants selon des critères bien définis qui concernent *l&#39;historisation*, ceci est expliqué par le tableau suivant :
 
-    |     | False     | True | 
+    |     | Historisation : False     | Historisation : True | 
     | :---:   | :-----------: | :---: |
     |     | -----   | ----- |
-    | ficher existant | on étend le délai l&#39;expiration et on supprime le reste | on ajoute |
+    | **ficher existant** | on étend le délai d&#39;expiration et on supprime le reste | on étend le délai d&#39;expiration |
     |  -----   | -----   | ----- |
-    | nouveau fichier | on supprime tout et on rajoute  | on étend le délai d&#34;expiration |
+    | **nouveau fichier** | on supprime tout et on ajoute  | on ajoute simplement  |
 
     &#39;&#39;&#39;
     # This function is used to add a file to the distant server.

@@ -35,8 +35,11 @@ from modules.ConfigHandler import ConfigHandler
 
 logger = logging.getLogger()
 class EmailHandler:
+    &#39;&#39;&#39; ##**Cette classe nous permet de manipuler les emails envoyés à l&#39;utilisateur.** &#39;&#39;&#39;
     server = None
+    &#39;&#39;&#39; cette variable présente notre serveur pour l&#39;envoie du mail. &#39;&#39;&#39;
     mail_sender = None
+    &#39;&#39;&#39; cette variable est l&#39;envoyeur de notre email, c&#39;est le bot automatisé dans notre cas.&#39;&#39;&#39;
         
     def __init__(self,smtp_server,port,mail_sender, password):
         # Applying singleton pattern, to avoid instantiating the class more than once.
@@ -50,6 +53,7 @@ class EmailHandler:
         EmailHandler.mail_sender = mail_sender
         
     def message_template(self,mail_receivers,subject,body):
+        &#39;&#39;&#39; La création du message envoyé et tous ses paramètres.&#39;&#39;&#39;
         try: 
             # creating a message object  &amp;&amp; init congig handler
             config = ConfigHandler()
@@ -85,6 +89,7 @@ class EmailHandler:
 
         
     def send_email(self,mail_receivers,subject,body):
+        &#39;&#39;&#39; Fonction pour l&#39;envoie de l&#39;email créé. &#39;&#39;&#39;
         # creating a message based on message_template function
         message = self.message_template(mail_receivers,subject,body)
         # send message to all mail receivers
@@ -105,14 +110,17 @@ class EmailHandler:
 <span>(</span><span>smtp_server, port, mail_sender, password)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><h2 id="cette-classe-nous-permet-de-manipuler-les-emails-envoyes-a-lutilisateur"><strong>Cette classe nous permet de manipuler les emails envoyés à l'utilisateur.</strong></h2></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class EmailHandler:
+    &#39;&#39;&#39; ##**Cette classe nous permet de manipuler les emails envoyés à l&#39;utilisateur.** &#39;&#39;&#39;
     server = None
+    &#39;&#39;&#39; cette variable présente notre serveur pour l&#39;envoie du mail. &#39;&#39;&#39;
     mail_sender = None
+    &#39;&#39;&#39; cette variable est l&#39;envoyeur de notre email, c&#39;est le bot automatisé dans notre cas.&#39;&#39;&#39;
         
     def __init__(self,smtp_server,port,mail_sender, password):
         # Applying singleton pattern, to avoid instantiating the class more than once.
@@ -126,6 +134,7 @@ class EmailHandler:
         EmailHandler.mail_sender = mail_sender
         
     def message_template(self,mail_receivers,subject,body):
+        &#39;&#39;&#39; La création du message envoyé et tous ses paramètres.&#39;&#39;&#39;
         try: 
             # creating a message object  &amp;&amp; init congig handler
             config = ConfigHandler()
@@ -161,6 +170,7 @@ class EmailHandler:
 
         
     def send_email(self,mail_receivers,subject,body):
+        &#39;&#39;&#39; Fonction pour l&#39;envoie de l&#39;email créé. &#39;&#39;&#39;
         # creating a message based on message_template function
         message = self.message_template(mail_receivers,subject,body)
         # send message to all mail receivers
@@ -170,11 +180,11 @@ class EmailHandler:
 <dl>
 <dt id="app.modules.EmailHandler.EmailHandler.mail_sender"><code class="name">var <span class="ident">mail_sender</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>cette variable est l'envoyeur de notre email, c'est le bot automatisé dans notre cas.</p></div>
 </dd>
 <dt id="app.modules.EmailHandler.EmailHandler.server"><code class="name">var <span class="ident">server</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>cette variable présente notre serveur pour l'envoie du mail.</p></div>
 </dd>
 </dl>
 <h3>Methods</h3>
@@ -183,12 +193,13 @@ class EmailHandler:
 <span>def <span class="ident">message_template</span></span>(<span>self, mail_receivers, subject, body)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>La création du message envoyé et tous ses paramètres.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def message_template(self,mail_receivers,subject,body):
+    &#39;&#39;&#39; La création du message envoyé et tous ses paramètres.&#39;&#39;&#39;
     try: 
         # creating a message object  &amp;&amp; init congig handler
         config = ConfigHandler()
@@ -227,12 +238,13 @@ class EmailHandler:
 <span>def <span class="ident">send_email</span></span>(<span>self, mail_receivers, subject, body)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Fonction pour l'envoie de l'email créé.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def send_email(self,mail_receivers,subject,body):
+    &#39;&#39;&#39; Fonction pour l&#39;envoie de l&#39;email créé. &#39;&#39;&#39;
     # creating a message based on message_template function
     message = self.message_template(mail_receivers,subject,body)
     # send message to all mail receivers
