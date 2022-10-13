@@ -38,7 +38,7 @@ if __name__ == '__main__':
         logger.error(str(error))
         validProcess = False
     finally:
-        # Closing connection to avoid any security / memory issues.
+        # Closing connections to avoid any security / memory issues.
         serverDistant.close_connection()
         logger.info("Server Distant Connection was closed successfully.")
         db.close_connection()
