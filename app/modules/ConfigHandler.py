@@ -27,6 +27,7 @@ class ConfigHandler:
 
         - ***Historisation*** : si elle est activée ou pas.
         - ***Délai d'expiration*** : présenté par le nombre des jours. '''
+    
     config = None
     '''À priori, cette variable présente le dictionnaire qui constitue notre configuration. '''
     
@@ -34,17 +35,17 @@ class ConfigHandler:
         ''' this is the main '''
         if ConfigHandler.config != None:
             return
-    
-        basedir = path.abspath(path.dirname(__file__))
+        
+        basedir = path.abspath(path.dirname(__file__)) # Getting the base directory
         with open(path.join(basedir,environ.get('CONFIG_PATH')), "r") as yamlfile:
-            ConfigHandler.config = yaml.load(yamlfile, Loader=yaml.FullLoader)
-            valid= v.validate(self.config,schema)
-            errors = v.errors
-            print(errors)
+            
+            ConfigHandler.config = yaml.load(yamlfile, Loader=yaml.FullLoader) # loading the yaml file
+            valid= v.validate(self.config,schema) # validating the config file using the schema
+            errors = v.errors # getting the errors
             yamlfile.close()
+            # if the config file is not valid, we raise an exception and we stop the execution.
             if not valid:
-                print('Not valid',errors,valid)
-                exit(1)
+                raise Exception('Not valid {}'.format(errors))
                 
     def get_versioning(self):
         '''C'est le *getter* qui nous permet de récupèrer la valeur de *l'Historisation*.'''

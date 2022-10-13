@@ -55,6 +55,7 @@ class ConfigHandler:
 
         - ***Historisation*** : si elle est activée ou pas.
         - ***Délai d&#39;expiration*** : présenté par le nombre des jours. &#39;&#39;&#39;
+    
     config = None
     &#39;&#39;&#39;À priori, cette variable présente le dictionnaire qui constitue notre configuration. &#39;&#39;&#39;
     
@@ -62,21 +63,21 @@ class ConfigHandler:
         &#39;&#39;&#39; this is the main &#39;&#39;&#39;
         if ConfigHandler.config != None:
             return
-    
-        basedir = path.abspath(path.dirname(__file__))
+        
+        basedir = path.abspath(path.dirname(__file__)) # Getting the base directory
         with open(path.join(basedir,environ.get(&#39;CONFIG_PATH&#39;)), &#34;r&#34;) as yamlfile:
-            ConfigHandler.config = yaml.load(yamlfile, Loader=yaml.FullLoader)
-            valid= v.validate(self.config,schema)
-            errors = v.errors
-            print(errors)
+            
+            ConfigHandler.config = yaml.load(yamlfile, Loader=yaml.FullLoader) # loading the yaml file
+            valid= v.validate(self.config,schema) # validating the config file using the schema
+            errors = v.errors # getting the errors
             yamlfile.close()
+            # if the config file is not valid, we raise an exception and we stop the execution.
             if not valid:
-                print(&#39;Not valid&#39;,errors,valid)
-                exit(1)
+                raise Exception(&#39;Not valid {}&#39;.format(errors))
                 
     def get_versioning(self):
         &#39;&#39;&#39;C&#39;est le *getter* qui nous permet de récupèrer la valeur de *l&#39;Historisation*.&#39;&#39;&#39;
-        return ConfigHandler.data[&#39;VERSIONING&#39;]
+        return ConfigHandler.config[&#39;VERSIONING&#39;]
     
     
     def get_expired_in(self):
@@ -133,6 +134,7 @@ class ConfigHandler:
 
         - ***Historisation*** : si elle est activée ou pas.
         - ***Délai d&#39;expiration*** : présenté par le nombre des jours. &#39;&#39;&#39;
+    
     config = None
     &#39;&#39;&#39;À priori, cette variable présente le dictionnaire qui constitue notre configuration. &#39;&#39;&#39;
     
@@ -140,21 +142,21 @@ class ConfigHandler:
         &#39;&#39;&#39; this is the main &#39;&#39;&#39;
         if ConfigHandler.config != None:
             return
-    
-        basedir = path.abspath(path.dirname(__file__))
+        
+        basedir = path.abspath(path.dirname(__file__)) # Getting the base directory
         with open(path.join(basedir,environ.get(&#39;CONFIG_PATH&#39;)), &#34;r&#34;) as yamlfile:
-            ConfigHandler.config = yaml.load(yamlfile, Loader=yaml.FullLoader)
-            valid= v.validate(self.config,schema)
-            errors = v.errors
-            print(errors)
+            
+            ConfigHandler.config = yaml.load(yamlfile, Loader=yaml.FullLoader) # loading the yaml file
+            valid= v.validate(self.config,schema) # validating the config file using the schema
+            errors = v.errors # getting the errors
             yamlfile.close()
+            # if the config file is not valid, we raise an exception and we stop the execution.
             if not valid:
-                print(&#39;Not valid&#39;,errors,valid)
-                exit(1)
+                raise Exception(&#39;Not valid {}&#39;.format(errors))
                 
     def get_versioning(self):
         &#39;&#39;&#39;C&#39;est le *getter* qui nous permet de récupèrer la valeur de *l&#39;Historisation*.&#39;&#39;&#39;
-        return ConfigHandler.data[&#39;VERSIONING&#39;]
+        return ConfigHandler.config[&#39;VERSIONING&#39;]
     
     
     def get_expired_in(self):
@@ -307,7 +309,7 @@ class ConfigHandler:
 </summary>
 <pre><code class="python">def get_versioning(self):
     &#39;&#39;&#39;C&#39;est le *getter* qui nous permet de récupèrer la valeur de *l&#39;Historisation*.&#39;&#39;&#39;
-    return ConfigHandler.data[&#39;VERSIONING&#39;]</code></pre>
+    return ConfigHandler.config[&#39;VERSIONING&#39;]</code></pre>
 </details>
 </dd>
 </dl>

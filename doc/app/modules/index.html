@@ -32,14 +32,19 @@ from modules.ConfigHandler import ConfigHandler
 import logging
 
 
+
 basedir = path.abspath(path.dirname(__file__))
+# Loading the .env file.
 load_dotenv(path.join(basedir, &#39;../.env&#39;))
+# setting up the logger
 logger = logging.getLogger()
 fhandler = logging.FileHandler(filename=path.join(basedir, environ.get(&#39;LOG_FILE_PATH&#39;)), mode=&#39;w&#39;)
+# Set the format that the logger needs to follow
 formatter = logging.Formatter(&#39;{} %(asctime)s - %(levelname)s - %(message)s&#39;.format(environ.get(&#34;LOGGER_NAME&#34;)))
 fhandler.setFormatter(formatter)
 logger.addHandler(fhandler)
 logger.setLevel(logging.INFO)
+# loading config from yaml + validating the config.
 ConfigHandler()</code></pre>
 </details>
 </section>
