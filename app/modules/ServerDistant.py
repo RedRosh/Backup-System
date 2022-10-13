@@ -19,12 +19,12 @@ class ServerDistant:
     def add_file(self,file,hash):
         '''Manipulation des fichiers Ajoutés ou déjà existants selon des critères bien définis qui concernent *l'historisation*, ceci est expliqué par le tableau suivant :
 
-        |     | False     | True | 
+        |     | Historisation : False     | Historisation : True | 
         | :---:   | :-----------: | :---: |
         |     | -----   | ----- |
-        | ficher existant | on étend le délai l'expiration et on supprime le reste | on ajoute |
+        | **ficher existant** | on étend le délai d'expiration et on supprime le reste | on étend le délai d'expiration |
         |  -----   | -----   | ----- |
-        | nouveau fichier | on supprime tout et on rajoute  | on étend le délai d"expiration |
+        | **nouveau fichier** | on supprime tout et on ajoute  | on ajoute simplement  |
 
         '''
         config = ConfigHandler()

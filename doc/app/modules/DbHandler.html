@@ -55,7 +55,7 @@ class DbHandler:
         cur.close()
 
     def find_all(self):
-        &#39;&#39;&#39;Sélection des fichiers qui n&#39;ont pas encore dépassé le délai d&#39;expiration sous forme d&#39;un tuple&#39;&#39;&#39;
+        &#39;&#39;&#39;Sélection des fichiers qui n&#39;ont pas encore dépassé le délai d&#39;expiration sous forme d&#39;un tuple.&#39;&#39;&#39;
         sql = &#34;SELECT * FROM v_archivage_files WHERE is_expired = {};&#34;.format(False)
         cur = self.connection.cursor()
         cur.execute(sql)
@@ -156,7 +156,7 @@ class DbHandler:
         cur.close()
 
     def find_all(self):
-        &#39;&#39;&#39;Sélection des fichiers qui n&#39;ont pas encore dépassé le délai d&#39;expiration sous forme d&#39;un tuple&#39;&#39;&#39;
+        &#39;&#39;&#39;Sélection des fichiers qui n&#39;ont pas encore dépassé le délai d&#39;expiration sous forme d&#39;un tuple.&#39;&#39;&#39;
         sql = &#34;SELECT * FROM v_archivage_files WHERE is_expired = {};&#34;.format(False)
         cur = self.connection.cursor()
         cur.execute(sql)
@@ -280,13 +280,13 @@ class DbHandler:
 <span>def <span class="ident">find_all</span></span>(<span>self)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Sélection des fichiers qui n'ont pas encore dépassé le délai d'expiration sous forme d'un tuple</p></div>
+<div class="desc"><p>Sélection des fichiers qui n'ont pas encore dépassé le délai d'expiration sous forme d'un tuple.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def find_all(self):
-    &#39;&#39;&#39;Sélection des fichiers qui n&#39;ont pas encore dépassé le délai d&#39;expiration sous forme d&#39;un tuple&#39;&#39;&#39;
+    &#39;&#39;&#39;Sélection des fichiers qui n&#39;ont pas encore dépassé le délai d&#39;expiration sous forme d&#39;un tuple.&#39;&#39;&#39;
     sql = &#34;SELECT * FROM v_archivage_files WHERE is_expired = {};&#34;.format(False)
     cur = self.connection.cursor()
     cur.execute(sql)
