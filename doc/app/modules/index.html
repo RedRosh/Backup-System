@@ -29,22 +29,16 @@
 <pre><code class="python">from os import path,environ
 from dotenv import load_dotenv
 from modules.ConfigHandler import ConfigHandler
-<<<<<<< HEAD
 &#39;&#39;&#39;
 a small title 
 &#39;&#39;&#39;
-=======
 import logging
 
->>>>>>> 5cc226b32f5a7909136098699ebe6d08a67fa972
 
 
 basedir = path.abspath(path.dirname(__file__))
 # Loading the .env file.
 load_dotenv(path.join(basedir, &#39;../.env&#39;))
-<<<<<<< HEAD
-ConfigHandler() </code></pre>
-=======
 # setting up the logger
 logger = logging.getLogger()
 fhandler = logging.FileHandler(filename=path.join(basedir, environ.get(&#39;LOG_FILE_PATH&#39;)), mode=&#39;w&#39;)
@@ -55,7 +49,6 @@ logger.addHandler(fhandler)
 logger.setLevel(logging.INFO)
 # loading config from yaml + validating the config.
 ConfigHandler()</code></pre>
->>>>>>> 5cc226b32f5a7909136098699ebe6d08a67fa972
 </details>
 </section>
 <section>

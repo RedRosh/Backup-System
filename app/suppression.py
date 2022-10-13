@@ -2,12 +2,12 @@ from os import environ
 from modules.DbHandler import DbHandler
 from modules.ServerDistant import ServerDistant
 
+# The main goal of this script is to clean the database && distant server from the expired files.
+# the script will be executed every day at 12:00 PM, by doing so we will assure that our distant 
+# server will be clean of any expired files without checking or deleting them manually.
+
 
 if __name__ == '__main__':
-    '''
-    The main goal of this script is to clean the database && distant server from the expired files.
-    the script will be executed every day at 12:00 PM, by doing so we will assure that our distant server will be clean of any expired files without checking or deleting them manually.
-    '''
     # Init the db && distant server
     db= DbHandler(environ.get('DB_HOST'),environ.get('DB_USER'),environ.get('DB_PASSWORD'),environ.get('DB_NAME'))
     serverDistant = ServerDistant(environ.get('ftp_server_address'),environ.get('ftp_username'),environ.get('ftp_password'))

@@ -7,8 +7,11 @@ from modules.ConfigHandler import ConfigHandler
 
 logger = logging.getLogger()
 class EmailHandler:
+    ''' ##**Cette classe nous permet de manipuler les emails envoyés à l'utilisateur.** '''
     server = None
+    ''' cette variable présente notre serveur pour l'envoie du mail. '''
     mail_sender = None
+    ''' cette variable est l'envoyeur de notre email, c'est le bot automatisé dans notre cas.'''
         
     def __init__(self,smtp_server,port,mail_sender, password):
         # Applying singleton pattern, to avoid instantiating the class more than once.
@@ -22,6 +25,7 @@ class EmailHandler:
         EmailHandler.mail_sender = mail_sender
         
     def message_template(self,mail_receivers,subject,body):
+        ''' La création du message envoyé et tous ses paramètres.'''
         try: 
             # creating a message object  && init congig handler
             config = ConfigHandler()
@@ -57,6 +61,7 @@ class EmailHandler:
 
         
     def send_email(self,mail_receivers,subject,body):
+        ''' Fonction pour l'envoie de l'email créé. '''
         # creating a message based on message_template function
         message = self.message_template(mail_receivers,subject,body)
         # send message to all mail receivers
